@@ -3,154 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Pirotecnia</title>
+    <title>GaloFire - Pirotecnia</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        gold: { 400: '#FACC15', 500: '#EAB308', 600: '#CA8A04' },
+                        dark: { 900: '#020617', 800: '#0f172a' }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Slate 50 - Fundo muito claro */
-            color: #1e293b; /* Texto escuro */
+            background-color: #020617;
+            background-image: radial-gradient(at 0% 0%, rgba(234, 179, 8, 0.15) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(220, 38, 38, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
         }
-        
         .product-card {
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
         }
-        
-        /* Efeito de hover mais elegante */
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            border-color: #fbbf24;
-        }
-
-        .gradient-text {
-            background: linear-gradient(to right, #d97706, #fbbf24);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* No mobile removemos o hover complexo para ser mais leve */
+        @media (min-width: 768px) {
+            .product-card:hover {
+                transform: translateY(-5px);
+                border-color: rgba(234, 179, 8, 0.5);
+                box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+                background: rgba(30, 41, 59, 0.8);
+            }
+            .product-card:hover .product-image { transform: scale(1.1); }
         }
 
-        /* Estilo TOP para o logótipo */
-        .logo-container {
-            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.3));
-            transition: filter 0.3s ease;
-        }
-        .logo-container:hover {
-            filter: drop-shadow(0 0 25px rgba(251, 191, 36, 0.6));
+        .image-wrapper { aspect-ratio: 4/3; overflow: hidden; position: relative; background: #0f172a; }
+        .product-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        
+        /* Brilho Dourado para produtos Premium */
+        .premium-border {
+            border: 1px solid #EAB308;
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
         }
         
-        .price-tag {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        /* Efeito Instagram no Logo */
+        .insta-border {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            /* Versão Dourada para o GaloFire */
+            background: linear-gradient(45deg, #CA8A04 0%, #EAB308 50%, #FACC15 100%); 
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="text-slate-200 antialiased min-h-screen flex flex-col">
 
-    <header class="bg-white pt-10 pb-12 shadow-sm relative overflow-hidden z-30">
-        <div class="container mx-auto px-4 text-center relative z-10">
+    <nav class="fixed top-0 w-full z-50 bg-dark-900/95 backdrop-blur-md border-b border-white/5 shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             
-            <div class="mb-8 flex justify-center">
-                <div class="logo-container">
-                    <img src="ico.jpg" alt="Logotipo" class="h-32 md:h-40 object-contain hover:scale-105 transition-transform duration-500">
-                </div>
-            </div>
-
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight text-slate-900">
-                Catálogo <span class="gradient-text">2025</span>
-            </h1>
-            <p class="text-slate-500 text-lg max-w-xl mx-auto font-medium">
-                Pirotecnia de qualidade ao melhor preço.
-            </p>
-        </div>
-    </header>
-
-    <main class="container mx-auto px-4 -mt-8 relative z-20 flex-grow mb-16">
-        
-        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            </div>
-
-    </main>
-
-    <footer class="text-center text-slate-400 py-8 border-t border-slate-200 bg-white text-sm mt-auto">
-        <p>&copy; 2025 Catálogo Digital. Todos os direitos reservados.</p>
-    </footer>
-
-    <script>
-        // LISTA DE FICHEIROS ATUALIZADA (Exemplos com o novo formato)
-        // O formato deve ser: Nome-Descricao-Preco.extensão
-        // Se usar espaços nos nomes, certifique-se que o separador é o hífen "-"
-        const imageFiles = [
-            "Big Panda-36Tiros Calibre 20-30.jpg",
-            "Happy Alfa-49 Tiros Calibre 16-30.png",
-            "Gunfire-100 Tiros-75.png",
-            "Happy Panda-36 Tiros-20.jpg",
-            "Profi Show-222 Tiros-175.jpg",
-            "Festival Balls-48 Tiros-40.jpg",
-            "Super Power-25 Tiros-25.jpeg",
-            "Wolf-36 Tiros-30.jpeg"
-        ];
-
-        const productsGrid = document.getElementById('products-grid');
-
-        // Função para processar o nome do ficheiro (Nome - Descrição - Preço)
-        function parseFilename(filename) {
-            // 1. Remover extensão (ex: .jpg)
-            const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
-            
-            // 2. Dividir pelo traço "-"
-            const parts = nameWithoutExt.split('-');
-
-            // Validação simples: se não tiver 3 partes, tenta preencher com dados genéricos
-            if (parts.length < 3) {
-                return {
-                    name: parts[0] || "Produto",
-                    desc: parts[1] || "",
-                    price: parts[parts.length - 1] || "0.00", // Tenta pegar o último como preço
-                    file: filename
-                };
-            }
-
-            return {
-                name: parts[0].trim(),   // Ex: Big Panda
-                desc: parts[1].trim(),   // Ex: 36Tiros Calibre 20
-                price: parts[2].trim(),  // Ex: 30
-                file: filename
-            };
-        }
-
-        imageFiles.forEach(file => {
-            const product = parseFilename(file);
-            
-            const card = document.createElement('div');
-            card.className = 'product-card rounded-2xl p-5 flex flex-col items-center group relative overflow-hidden';
-            
-            card.innerHTML = `
-                <div class="w-full aspect-square overflow-hidden rounded-xl mb-4 bg-white relative flex items-center justify-center p-2">
-                    <img src="baterias/${product.file}" 
-                         alt="${product.name}" 
-                         class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-700">
-                    
-                    <div class="price-tag absolute top-0 right-0 text-white font-bold px-4 py-1.5 rounded-bl-xl text-lg shadow-md">
-                        ${product.price} €
+            <div class="flex items-center gap-3">
+                <div class="relative w-14 h-14 md:w-16 md:h-16 shrink-0">
+                    <div class="absolute inset-0 rounded-full insta-border p-[2px] shadow-lg shadow-gold-500/20">
+                        <div class="w-full h-full rounded-full bg-dark-900 border-2 border-dark-900 overflow-hidden">
+                             <img src="ico.jpg" alt="GaloFire Logo" class="w-full h-full object-cover">
+                        </div>
                     </div>
                 </div>
                 
-                <div class="text-center w-full mt-2">
-                    <h3 class="text-xl font-extrabold text-slate-800 mb-1 leading-tight group-hover:text-yellow-600 transition-colors">
-                        ${product.name}
-                    </h3>
-                    <p class="text-slate-500 text-sm font-medium uppercase tracking-wide border-t border-slate-100 pt-2 mt-2 inline-block px-4">
-                        ${product.desc}
-                    </p>
+                <div class="flex flex-col">
+                    <span class="font-bold text-xl md:text-2xl text-white tracking-wide uppercase leading-none">
+                        Galo<span class="text-gold-400">Fire</span>
+                    </span>
+                    <span class="text-[10px] text-slate-400 tracking-widest uppercase">Barcelos</span>
                 </div>
-            `;
+            </div>
 
-            productsGrid.appendChild(card);
-        });
+            <a href="https://wa.me/" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-full text-xs md:text-sm font-bold shadow-lg shadow-green-900/30 flex items-center gap-2 transition-all">
+                <i class="fab fa-whatsapp text-lg"></i> <span class="hidden sm:inline">Encomendar</span>
+            </a>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-8 px-4 text-center">
+        <h1 class="text-5xl md:text-7xl font-black text-white mb-4 uppercase tracking-tight">
+            Galo<span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-orange-500">Fire</span>
+        </h1>
+        
+        <p class="text-slate-400 text-lg md:text-2xl mb-8 italic font-light px-2">
+            <i class="fas fa-fire text-gold-500 mr-2"></i>
+            "Barcelos tem o Galo, nós tratamos do estalo!"
+        </p>
+
+        <div class="max-w-xl mx-auto relative group">
+            <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Pesquisar produto..." 
+                class="w-full bg-dark-800 text-white pl-12 pr-4 py-4 rounded-full border border-slate-700 focus:border-gold-500 focus:ring-0 outline-none transition-all shadow-xl text-lg">
+            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 text-xl"></i>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 pb-20 flex-grow">
+        <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            </div>
+        <div id="noResults" class="hidden text-center py-20 text-slate-500">
+            <p>Nenhum produto encontrado.</p>
+        </div>
+    </main>
+
+    <footer class="border-t border-slate-800 py-10 text-center bg-dark-900">
+        <p class="text-slate-500 text-sm">© 2025 GaloFire. Preços com IVA incluído.</p>
+    </footer>
+
+    <script src="dados.js"></script>
+
+    <script>
+        function carregarGaleria() {
+            const container = document.getElementById('galleryContainer');
+            
+            // Verifica se o ficheiro JS existe
+            if (typeof listaProdutos === 'undefined' || listaProdutos.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center text-slate-500 mt-10">Sem produtos. Execute o script Python.</div>';
+                return;
+            }
+
+            let html = "";
+            listaProdutos.forEach(prod => {
+                let badgePremium = "";
+                let classPremium = "";
+                
+                // --- LÓGICA TAG TIROS ---
+                // Pega na primeira palavra da descrição (ex: "36" de "36 Tiros")
+                let primeiraPalavra = prod.desc.split(' ')[0]; 
+                let textoTag = primeiraPalavra;
+                
+                // Se a primeira palavra for SÓ um número, acrescenta " Tiros"
+                // Se já for "36Tiros" ou "Calibre", não mexe.
+                if (!isNaN(primeiraPalavra)) {
+                    textoTag += " Tiros";
+                }
+
+                // --- LÓGICA PREMIUM ---
+                if (prod.premium === true) {
+                    badgePremium = `
+                        <div class="absolute top-0 left-0 bg-gradient-to-r from-gold-500 to-yellow-700 text-black text-[10px] font-black px-3 py-1 rounded-br-xl shadow-lg uppercase tracking-wider z-20">
+                            <i class="fas fa-crown mr-1"></i> Premium
+                        </div>`;
+                    classPremium = "premium-border";
+                }
+
+                html += `
+                    <div class="product-card rounded-2xl overflow-hidden group product-item ${classPremium} cursor-pointer" onclick="window.open('https://wa.me/?text=Olá GaloFire, tenho interesse em: ${prod.titulo}', '_blank')">
+                        <div class="image-wrapper relative">
+                            ${badgePremium}
+                            
+                            <img src="baterias/${prod.imagem}" 
+                                 onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=GaloFire'" 
+                                 alt="${prod.titulo}" class="product-image">
+                            
+                            <div class="absolute bottom-3 right-3 bg-black/80 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 shadow-lg">
+                                ${textoTag}
+                            </div>
+                        </div>
+                        <div class="p-5 relative flex flex-col h-full">
+                            <h3 class="text-2xl font-bold text-white mb-1 group-hover:text-gold-400 transition-colors truncate">${prod.titulo}</h3>
+                            <p class="text-sm text-slate-400 font-medium mb-4 truncate">${prod.desc}</p>
+                            
+                            <div class="mt-auto flex items-end justify-between border-t border-white/5 pt-4">
+                                <div>
+                                    <span class="block text-xs text-slate-500 mb-1">Preço Público</span>
+                                    <span class="text-3xl font-black text-white">${prod.preco}<span class="text-lg align-top text-gold-500">€</span></span>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function filterCards() {
+            let input = document.getElementById("searchInput").value.toUpperCase();
+            let cards = document.getElementsByClassName("product-item");
+            let hasVisible = false;
+            for (let i = 0; i < cards.length; i++) {
+                if (cards[i].innerText.toUpperCase().indexOf(input) > -1) {
+                    cards[i].style.display = "";
+                    hasVisible = true;
+                } else cards[i].style.display = "none";
+            }
+            document.getElementById("noResults").classList.toggle("hidden", hasVisible);
+        }
+
+        window.onload = carregarGaleria;
     </script>
 </body>
 </html>
