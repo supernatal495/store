@@ -78,13 +78,16 @@
             background: linear-gradient(45deg, #CA8A04 0%, #EAB308 50%, #FACC15 100%); 
         }
 
-        /* Botão Flutuante WhatsApp */
-        .whatsapp-float {
+        /* Botão Flutuante Instagram */
+        .insta-float {
             position: fixed;
             bottom: 25px;
             right: 25px;
             z-index: 100;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        .insta-gradient {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
         }
     </style>
 </head>
@@ -144,8 +147,8 @@
         </div>
     </main>
 
-    <a href="https://wa.me/" target="_blank" class="whatsapp-float bg-green-500 w-14 h-14 rounded-full flex items-center justify-center text-white text-3xl hover:bg-green-400 transition-all hover:scale-110 animate-bounce">
-        <i class="fab fa-whatsapp"></i>
+    <a href="https://ig.me/m/galo.fire" target="_blank" class="insta-float insta-gradient w-14 h-14 rounded-full flex items-center justify-center text-white text-3xl hover:opacity-90 transition-all hover:scale-110 animate-bounce">
+        <i class="fab fa-instagram"></i>
     </a>
 
     <footer class="border-t border-slate-800 py-10 text-center bg-dark-900">
@@ -199,11 +202,11 @@
 
                 // ADICIONEI loading="lazy" na imagem para performance
                 html += `
-                    <div class="product-card rounded-2xl overflow-hidden group product-item ${classPremium} cursor-pointer relative" onclick="window.open('https://wa.me/?text=Olá GaloFire, tenho interesse em: ${prod.titulo}', '_blank')">
+                    <div class="product-card rounded-2xl overflow-hidden group product-item ${classPremium} cursor-pointer relative" onclick="window.open('https://ig.me/m/galo.fire', '_blank')">
                         <div class="image-wrapper relative">
                             ${badgePremium}
                             
-                            <img src="baterias/${prod.imagem}" 
+                            <img src="${prod.categoria}/${prod.imagem}" 
                                  loading="lazy" 
                                  onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=GaloFire'" 
                                  alt="${prod.titulo}" class="product-image">
