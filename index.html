@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preçário 2025 | Catálogo Oficial</title>
+    <title>Catálogo de Pirotecnia</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,247 +11,146 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a; /* Slate 900 */
-            color: #e2e8f0;
+            background-color: #f8fafc; /* Slate 50 - Fundo muito claro */
+            color: #1e293b; /* Texto escuro */
         }
-        .glass-effect {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        
+        .product-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        /* Efeito de hover mais elegante */
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border-color: #fbbf24;
+        }
+
         .gradient-text {
-            background: linear-gradient(to right, #fbbf24, #f59e0b);
+            background: linear-gradient(to right, #d97706, #fbbf24);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .gold-border {
-            border-bottom: 2px solid #f59e0b;
-        }
 
-        @keyframes pulse-glow {
-            0%, 100% {
-                box-shadow: 0 0 30px rgba(251, 191, 36, 0.5), 0 0 40px rgba(251, 191, 36, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 45px rgba(251, 191, 36, 0.9), 0 0 60px rgba(251, 191, 36, 0.7);
-            }
+        /* Estilo TOP para o logótipo */
+        .logo-container {
+            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.3));
+            transition: filter 0.3s ease;
         }
-        .logo-glow {
-            animation: pulse-glow 4s infinite ease-in-out;
+        .logo-container:hover {
+            filter: drop-shadow(0 0 25px rgba(251, 191, 36, 0.6));
         }
-        .whatsapp-fab {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background-color: #25D366;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
-            z-index: 1000;
-        }
-        .whatsapp-fab:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        
+        .price-tag {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
         }
     </style>
 </head>
-<body class="min-h-screen pb-10">
+<body class="min-h-screen flex flex-col">
 
-    <header class="relative bg-slate-900 pt-10 pb-20 overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
-            <div class="absolute top-10 left-10 w-64 h-64 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
-            <div class="absolute top-10 right-10 w-64 h-64 bg-red-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
-        </div>
-
+    <header class="bg-white pt-10 pb-12 shadow-sm relative overflow-hidden z-30">
         <div class="container mx-auto px-4 text-center relative z-10">
-            <div class="mb-6 flex justify-center">
-                <div class="bg-white/10 p-4 rounded-2xl shadow-2xl glass-effect inline-block logo-glow">
-                    <img src="image_1f77d3.jpg" alt="Logotipo" class="h-48 object-contain mx-auto rounded-lg">
+            
+            <div class="mb-8 flex justify-center">
+                <div class="logo-container">
+                    <img src="ico.jpg" alt="Logotipo" class="h-32 md:h-40 object-contain hover:scale-105 transition-transform duration-500">
                 </div>
             </div>
-            
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-2 tracking-tight text-white">
-                Preçário <span class="gradient-text">2025</span>
-            </h1>
-            <p class="text-slate-400 text-lg max-w-xl mx-auto">
-                Consulte a nossa tabela oficial de Baterias e Pirotecnia.
-            </p>
 
-            <div class="mt-8 max-w-md mx-auto relative">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <i class="fas fa-search"></i>
-                </span>
-                <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Pesquisar produto..." 
-                    class="block w-full pl-10 pr-3 py-3 rounded-full bg-slate-800 border-slate-700 placeholder-slate-400 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent shadow-lg transition-all">
-            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight text-slate-900">
+                Catálogo <span class="gradient-text">2025</span>
+            </h1>
+            <p class="text-slate-500 text-lg max-w-xl mx-auto font-medium">
+                Pirotecnia de qualidade ao melhor preço.
+            </p>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 -mt-10 relative z-20">
-
-        <div class="glass-effect rounded-2xl p-6 mb-12 shadow-2xl product-section">
-            <div class="flex items-center mb-6">
-                <div class="p-3 bg-yellow-500/20 rounded-lg mr-4">
-                    <i class="fas fa-rocket text-yellow-500 text-2xl"></i>
-                </div>
-                <h2 class="text-2xl font-bold text-white">Baterias & Espetáculo</h2>
+    <main class="container mx-auto px-4 -mt-8 relative z-20 flex-grow mb-16">
+        
+        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="text-slate-400 border-b border-slate-700 text-sm uppercase tracking-wider">
-                            <th class="py-4 px-4 font-semibold">Produto</th>
-                            <th class="py-4 px-4 text-right font-semibold text-yellow-500">Preço Revenda (R)</th>
-                            <th class="py-4 px-4 text-right font-semibold">Preço Público (P)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-700 text-slate-200 searchable-list">
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Happy Panda - 36 Tiros Calibre 16</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">14,00 €</td>
-                            <td class="py-4 px-4 text-right">20,00 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Feliz Ano Novo - 36 Tiros Calibre 18</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">17,50 €</td>
-                            <td class="py-4 px-4 text-right">25,00 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Happy Alfa - 49 Tiros Calibre 16</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">18,00 €</td>
-                            <td class="py-4 px-4 text-right">30,00 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Big Panda - 36 Tiros Calibre 20</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">20,00 €</td>
-                            <td class="py-4 px-4 text-right">30,00 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Festival Balls/Sea Crab - 48 Tiros Calibre 20</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">30,00 €</td>
-                            <td class="py-4 px-4 text-right">40,00 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Happy Alfa - 100 Tiros Calibre 16</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">32,50 €</td>
-                            <td class="py-4 px-4 text-right">40,00 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Gunfire - 100 Tiros Calibre 20</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">60,00 €</td>
-                            <td class="py-4 px-4 text-right">75,00 €</td>
-                        </tr>
-                         <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">222 Tiros Calibre 20</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">150,00 €</td>
-                            <td class="py-4 px-4 text-right">175,00 €</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="glass-effect rounded-2xl p-6 shadow-2xl product-section">
-            <div class="flex items-center mb-6">
-                <div class="p-3 bg-red-500/20 rounded-lg mr-4">
-                    <i class="fas fa-bomb text-red-500 text-2xl"></i>
-                </div>
-                <h2 class="text-2xl font-bold text-white">Petardos & Pequena Pirotecnia</h2>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="text-slate-400 border-b border-slate-700 text-sm uppercase tracking-wider">
-                            <th class="py-4 px-4 font-semibold">Produto</th>
-                            <th class="py-4 px-4 text-right font-semibold text-yellow-500">Preço Revenda (R)</th>
-                            <th class="py-4 px-4 text-right font-semibold">Preço Público (P)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-700 text-slate-200 searchable-list">
-                         <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Tracas</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">0,50 €</td>
-                            <td class="py-4 px-4 text-right">1,00 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Hilo Tiron</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">1,50 €</td>
-                            <td class="py-4 px-4 text-right">2,50 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Petardo Artesanal</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">2,25 €</td>
-                            <td class="py-4 px-4 text-right">4,00 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Pk2</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">2,50 €</td>
-                            <td class="py-4 px-4 text-right">6,00 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">Americanos</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">4,00 €</td>
-                            <td class="py-4 px-4 text-right">7,50 €</td>
-                        </tr>
-                        <tr class="hover:bg-slate-700/50 transition-colors group">
-                            <td class="py-4 px-4 font-medium group-hover:text-white">P2</td>
-                            <td class="py-4 px-4 text-right font-bold text-yellow-400">5,00 €</td>
-                            <td class="py-4 px-4 text-right">--</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
     </main>
 
-    <a href="https://wa.me/351939686562?text=Olá,%20gostaria%20de%20tirar%20uma%20dúvida%20sobre%20o%20preçário." 
-        target="_blank" 
-        class="whatsapp-fab"
-        aria-label="Contactar via WhatsApp"
-        title="Contactar via WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-    <footer class="text-center text-slate-500 py-10 mt-10">
-        <p>&copy; 2025 Preçário Oficial. Todos os direitos reservados.</p>
+    <footer class="text-center text-slate-400 py-8 border-t border-slate-200 bg-white text-sm mt-auto">
+        <p>&copy; 2025 Catálogo Digital. Todos os direitos reservados.</p>
     </footer>
 
     <script>
-        function filterTable() {
-            var input, filter, tables, tr, td, i, j, txtValue;
-            input = document.getElementById("searchInput");
-            filter = input.value.toUpperCase();
+        // LISTA DE FICHEIROS ATUALIZADA (Exemplos com o novo formato)
+        // O formato deve ser: Nome-Descricao-Preco.extensão
+        // Se usar espaços nos nomes, certifique-se que o separador é o hífen "-"
+        const imageFiles = [
+            "Big Panda-36Tiros Calibre 20-30.jpg",
+            "Happy Alfa-49 Tiros Calibre 16-30.png",
+            "Gunfire-100 Tiros-75.png",
+            "Happy Panda-36 Tiros-20.jpg",
+            "Profi Show-222 Tiros-175.jpg",
+            "Festival Balls-48 Tiros-40.jpg",
+            "Super Power-25 Tiros-25.jpeg",
+            "Wolf-36 Tiros-30.jpeg"
+        ];
+
+        const productsGrid = document.getElementById('products-grid');
+
+        // Função para processar o nome do ficheiro (Nome - Descrição - Preço)
+        function parseFilename(filename) {
+            // 1. Remover extensão (ex: .jpg)
+            const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
             
-            // Seleciona todos os corpos de tabela com a classe searchable-list
-            var tbodies = document.getElementsByClassName("searchable-list");
-            
-            for (var t = 0; t < tbodies.length; t++) {
-                tr = tbodies[t].getElementsByTagName("tr");
-                
-                // Loop por todas as linhas da tabela
-                for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[0]; // Procura na primeira coluna (Produto)
-                    if (td) {
-                        txtValue = td.textContent || td.innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            tr[i].style.display = "";
-                        } else {
-                            tr[i].style.display = "none";
-                        }
-                    }       
-                }
+            // 2. Dividir pelo traço "-"
+            const parts = nameWithoutExt.split('-');
+
+            // Validação simples: se não tiver 3 partes, tenta preencher com dados genéricos
+            if (parts.length < 3) {
+                return {
+                    name: parts[0] || "Produto",
+                    desc: parts[1] || "",
+                    price: parts[parts.length - 1] || "0.00", // Tenta pegar o último como preço
+                    file: filename
+                };
             }
+
+            return {
+                name: parts[0].trim(),   // Ex: Big Panda
+                desc: parts[1].trim(),   // Ex: 36Tiros Calibre 20
+                price: parts[2].trim(),  // Ex: 30
+                file: filename
+            };
         }
+
+        imageFiles.forEach(file => {
+            const product = parseFilename(file);
+            
+            const card = document.createElement('div');
+            card.className = 'product-card rounded-2xl p-5 flex flex-col items-center group relative overflow-hidden';
+            
+            card.innerHTML = `
+                <div class="w-full aspect-square overflow-hidden rounded-xl mb-4 bg-white relative flex items-center justify-center p-2">
+                    <img src="baterias/${product.file}" 
+                         alt="${product.name}" 
+                         class="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-700">
+                    
+                    <div class="price-tag absolute top-0 right-0 text-white font-bold px-4 py-1.5 rounded-bl-xl text-lg shadow-md">
+                        ${product.price} €
+                    </div>
+                </div>
+                
+                <div class="text-center w-full mt-2">
+                    <h3 class="text-xl font-extrabold text-slate-800 mb-1 leading-tight group-hover:text-yellow-600 transition-colors">
+                        ${product.name}
+                    </h3>
+                    <p class="text-slate-500 text-sm font-medium uppercase tracking-wide border-t border-slate-100 pt-2 mt-2 inline-block px-4">
+                        ${product.desc}
+                    </p>
+                </div>
+            `;
+
+            productsGrid.appendChild(card);
+        });
     </script>
 </body>
 </html>
