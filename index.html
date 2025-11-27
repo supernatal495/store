@@ -16,6 +16,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     
     <script>
         tailwind.config = {
@@ -39,57 +40,6 @@
             }
         }
     </script>
-    <style>
-        body {
-            background-color: #020617;
-            background-image: radial-gradient(at 0% 0%, rgba(234, 179, 8, 0.15) 0px, transparent 50%),
-                              radial-gradient(at 100% 100%, rgba(220, 38, 38, 0.1) 0px, transparent 50%);
-            background-attachment: fixed;
-        }
-        
-        /* Melhoria Visual nos Cards */
-        .product-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        @media (min-width: 768px) {
-            .product-card:hover {
-                transform: translateY(-8px);
-                border-color: rgba(234, 179, 8, 0.4);
-                box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-                background: rgba(30, 41, 59, 0.8);
-            }
-            .product-card:hover .product-image { transform: scale(1.1); }
-        }
-
-        .image-wrapper { aspect-ratio: 4/3; overflow: hidden; position: relative; background: #0f172a; }
-        .product-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
-        
-        .premium-border {
-            /* Destaque premium mais forte */
-            border: 2px solid #EAB308;
-            box-shadow: 0 0 30px rgba(234, 179, 8, 0.4);
-        }
-        
-        .insta-border {
-            background: linear-gradient(45deg, #CA8A04 0%, #EAB308 50%, #FACC15 100%); 
-        }
-
-        /* Botão Flutuante Instagram */
-        .insta-float {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            z-index: 100;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
-        .insta-gradient {
-            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
-        }
-    </style>
 </head>
 <body class="text-slate-200 antialiased min-h-screen flex flex-col">
 
@@ -114,10 +64,10 @@
             </div> 
             
             <div class="flex space-x-3">
-                <a href="#galleryContainer" class="px-6 py-3 text-base font-semibold rounded-full bg-gold-500 text-dark-900 hover:bg-gold-400 transition-colors">
+                <a href="#galleryContainer" class="px-4 py-2 sm:px-6 sm:py-3 text-base font-semibold rounded-full bg-gold-500 text-dark-900 hover:bg-gold-400 transition-colors">
                     <i class="fas fa-battery-three-quarters mr-1"></i> Baterias
                 </a>
-                <a href="#" class="px-6 py-3 text-base font-semibold rounded-full bg-dark-800 text-slate-300 border border-slate-700 hover:bg-dark-700 transition-colors opacity-50 cursor-not-allowed" 
+                <a href="#" class="px-4 py-2 sm:px-6 sm:py-3 text-base font-semibold rounded-full bg-dark-800 text-slate-300 border border-slate-700 hover:bg-dark-700 transition-colors opacity-50 cursor-not-allowed" 
                     title="Catálogo de bombinhas em breve">
                     <i class="fas fa-bomb mr-1"></i> Bombinhas
                 </a>
@@ -156,85 +106,6 @@
     </footer>
 
     <script src="dados.js"></script>
-
-    <script>
-        function carregarGaleria() {
-            const container = document.getElementById('galleryContainer');
-            const loading = document.getElementById('loadingState');
-            
-            // Remove o loading
-            loading.style.display = 'none';
-
-            if (typeof listaProdutos === 'undefined' || listaProdutos.length === 0) {
-                container.innerHTML = '<div class="col-span-full text-center text-slate-500 mt-10">Sem produtos. Execute o script Python.</div>';
-                return;
-            }
-
-            let html = "";
-            listaProdutos.forEach(prod => {
-                let badgePremium = "";
-                let classPremium = "";
-                
-                // Classes de Destaque Premium
-                let titleColorClass = 'text-white group-hover:text-gold-400';
-                let priceColorClass = 'text-slate-200';
-                let euroColorClass = 'text-gold-500';
-
-                let primeiraPalavra = prod.desc.split(' ')[0]; 
-                let textoTag = primeiraPalavra;
-                
-                if (!isNaN(primeiraPalavra)) {
-                    textoTag += " Tiros";
-                }
-
-                if (prod.premium === true) {
-                    badgePremium = `
-                        <div class="absolute top-0 left-0 bg-gradient-to-r from-gold-500 to-yellow-700 text-black text-[10px] font-black px-3 py-1 rounded-br-xl shadow-lg uppercase tracking-wider z-20">
-                            <i class="fas fa-crown mr-1"></i> Premium
-                        </div>`;
-                    classPremium = "premium-border";
-                    
-                    // Aumentar destaque para o Premium
-                    titleColorClass = 'text-gold-400';
-                    priceColorClass = 'text-gold-400';
-                    euroColorClass = 'text-gold-400';
-                }
-
-                // ADICIONEI loading="lazy" na imagem para performance
-                html += `
-                    <div class="product-card rounded-2xl overflow-hidden group product-item ${classPremium} cursor-pointer relative" onclick="window.open('https://ig.me/m/galo.fire', '_blank')">
-                        <div class="image-wrapper relative">
-                            ${badgePremium}
-                            
-                            <img src="${prod.categoria}/${prod.imagem}" 
-                                 loading="lazy" 
-                                 onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=GaloFire'" 
-                                 alt="${prod.titulo}" class="product-image">
-                            
-                            <div class="absolute bottom-3 right-3 bg-black/80 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 shadow-lg z-10">
-                                ${textoTag}
-                            </div>
-                        </div>
-                        <div class="p-5 relative flex flex-col"> <h3 class="text-2xl font-bold ${titleColorClass} mb-1 transition-colors truncate">${prod.titulo}</h3>
-                            
-                            <div class="flex items-end justify-between mb-4">
-                                <p class="text-sm text-slate-400 font-medium truncate">${prod.desc}</p>
-                                <span class="text-2xl font-black ${priceColorClass} shrink-0">${prod.preco}<span class="text-lg align-top ${euroColorClass}">€</span></span>
-                            </div>
-
-                            <div class="flex items-end justify-end border-t border-white/5 pt-4">
-                                <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-slate-400 group-hover:text-gold-400 group-hover:bg-white/10 transition-all">
-                                    <i class="fas fa-chevron-right text-xs"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        window.onload = carregarGaleria;
-    </script>
+    <script src="app.js" defer></script>
 </body>
 </html>
