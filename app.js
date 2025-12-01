@@ -71,8 +71,8 @@ function carregarGaleria() {
                                  alt="${prod.titulo}" class="product-image">
                         </div>
                         <div class="p-5 text-center">
-                            <h3 class="text-lg font-semibold ${titleColorClass} mb-2 transition-colors">${prod.titulo}</h3>
-                            <p class="text-xl font-bold text-gold-400 mb-2">${prod.desc}</p>
+                            <h3 class="text-xl font-bold ${titleColorClass} mb-2 transition-colors">${prod.titulo}</h3>
+                            <p class="text-lg font-semibold text-gold-400 mb-2">${prod.desc}</p>
                             <span class="text-2xl font-black ${priceColorClass}">${prod.preco}<span class="text-lg align-top ${euroColorClass}">€</span></span>
                         </div>
                     </div>
