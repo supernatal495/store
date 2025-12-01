@@ -1,18 +1,36 @@
+let tipoAtual = 'baterias';
 
-        function carregarGaleria() {
-            const container = document.getElementById('galleryContainer');
-            const loading = document.getElementById('loadingState');
-            
-            // Remove o loading
-            loading.style.display = 'none';
+function mostrarBaterias() {
+    tipoAtual = 'baterias';
+    document.getElementById('btnBaterias').className = 'px-4 py-2 sm:px-6 sm:py-3 text-base font-semibold rounded-full bg-gold-500 text-dark-900 hover:bg-gold-400 transition-colors';
+    document.getElementById('btnBombinhas').className = 'px-4 py-2 sm:px-6 sm:py-3 text-base font-semibold rounded-full bg-dark-800 text-slate-300 border border-slate-700 hover:bg-dark-700 transition-colors';
+    carregarGaleria();
+}
 
-            if (typeof listaProdutos === 'undefined' || listaProdutos.length === 0) {
-                container.innerHTML = '<div class="col-span-full text-center text-slate-500 mt-10">Sem produtos. Execute o script Python.</div>';
-                return;
-            }
+function mostrarBombinhas() {
+    tipoAtual = 'bombinhas';
+    document.getElementById('btnBombinhas').className = 'px-4 py-2 sm:px-6 sm:py-3 text-base font-semibold rounded-full bg-gold-500 text-dark-900 hover:bg-gold-400 transition-colors';
+    document.getElementById('btnBaterias').className = 'px-4 py-2 sm:px-6 sm:py-3 text-base font-semibold rounded-full bg-dark-800 text-slate-300 border border-slate-700 hover:bg-dark-700 transition-colors';
+    carregarGaleria();
+}
 
-            let html = "";
-            listaProdutos.forEach(prod => {
+function carregarGaleria() {
+    const container = document.getElementById('galleryContainer');
+    const loading = document.getElementById('loadingState');
+    
+    // Remove o loading
+    loading.style.display = 'none';
+    
+    const produtos = tipoAtual === 'baterias' ? listaProdutos : listaPetardos;
+    const pastaImagem = tipoAtual === 'baterias' ? 'baterias' : 'petardo';
+
+    if (typeof produtos === 'undefined' || produtos.length === 0) {
+        container.innerHTML = '<div class="col-span-full text-center text-slate-500 mt-10">Sem produtos.</div>';
+        return;
+    }
+
+    let html = "";
+    produtos.forEach(prod => {
                 let badgePremium = "";
                 let classPremium = "";
                 
@@ -43,33 +61,19 @@
 
                 // ADICIONEI loading="lazy" na imagem para performance
                 html += `
-                    <div class="product-card rounded-2xl overflow-hidden group product-item ${classPremium} cursor-pointer relative transition-transform active:scale-[0.98]" onclick="window.open('https://ig.me/m/galo.fire', '_blank')">
+                    <div class="product-card rounded-2xl overflow-hidden group product-item ${classPremium} relative">
                         <div class="image-wrapper relative">
                             ${badgePremium}
                             
-                            <img src="${prod.categoria}/${prod.imagem}" 
+                            <img src="${pastaImagem}/${prod.imagem}" 
                                  loading="lazy" 
                                  onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=GaloFire'" 
                                  alt="${prod.titulo}" class="product-image">
-                            
-                            <div class="absolute bottom-3 right-3 bg-black/80 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/10 shadow-lg z-10">
-                                ${textoTag}
-                            </div>
                         </div>
-                        <div class="p-5 relative flex flex-col"> <h3 class="text-2xl font-bold ${titleColorClass} mb-1 transition-colors truncate">${prod.titulo}</h3>
-                            
-                            <div class="flex items-end justify-between mb-4">
-                                <p class="text-sm text-slate-400 font-medium truncate">${prod.desc}</p>
-                                <span class="text-2xl font-black ${priceColorClass} shrink-0">${prod.preco}<span class="text-lg align-top ${euroColorClass}">€</span></span>
-                            </div>
-
-                            <div class="border-t border-white/5 pt-4 mt-auto">
-                                <div class="bg-white/5 group-hover:bg-gold-500/10 p-3 rounded-lg text-center transition-all">
-                                    <span class="font-semibold text-sm text-slate-300 group-hover:text-gold-400">
-                                        Encomendar via Instagram <i class="fab fa-instagram ml-1"></i>
-                                    </span>
-                                </div>
-                            </div>
+                        <div class="p-5 text-center">
+                            <h3 class="text-lg font-semibold ${titleColorClass} mb-2 transition-colors">${prod.titulo}</h3>
+                            <p class="text-xl font-bold text-gold-400 mb-2">${prod.desc}</p>
+                            <span class="text-2xl font-black ${priceColorClass}">${prod.preco}<span class="text-lg align-top ${euroColorClass}">€</span></span>
                         </div>
                     </div>
                 `;

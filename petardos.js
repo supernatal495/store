@@ -1,0 +1,15 @@
+const listaPetardos = [
+    { id: "1", titulo: "Petardo Clássico", desc: "Petardo tradicional", preco: "5", imagem: "IMG_5697.png", premium: false },
+    { id: "2", titulo: "Bombinha Pequena", desc: "Efeito sonoro", preco: "7", imagem: "IMG_5698.png", premium: false },
+    { id: "3", titulo: "Petardo Médio", desc: "Som intenso", preco: "10", imagem: "IMG_5699.png", premium: false },
+    { id: "4", titulo: "Bombinha Grande", desc: "Efeito potente", preco: "15", imagem: "IMG_5700.png", premium: true },
+    { id: "5", titulo: "Petardo Especial", desc: "Qualidade superior", preco: "12", imagem: "IMG_5705.png", premium: false },
+    { id: "6", titulo: "Bombinha Premium", desc: "Efeito profissional", preco: "20", imagem: "IMG_5706.png", premium: true },
+    { id: "7", titulo: "Petardo Duplo", desc: "Duplo efeito", preco: "18", imagem: "IMG_5707.png", premium: false },
+    { id: "8", titulo: "Bombinha Tripla", desc: "Triplo impacto", preco: "25", imagem: "IMG_5708.png", premium: true },
+    { id: "9", titulo: "Petardo Deluxe", desc: "Edição limitada", preco: "30", imagem: "IMG_5709.png", premium: true },
+    { id: "10", titulo: "Bombinha Master", desc: "Máxima potência", preco: "35", imagem: "IMG_5710.png", premium: true },
+    { id: "11", titulo: "Petardo Pro", desc: "Uso profissional", preco: "22", imagem: "IMG_5713.png", premium: false },
+    { id: "12", titulo: "Bombinha Ultra", desc: "Tecnologia avançada", preco: "40", imagem: "IMG_5714.png", premium: true },
+    { id: "13", titulo: "Petardo Final", desc: "Grande finale", preco: "50", imagem: "IMG_5721.png", premium: true },
+];
