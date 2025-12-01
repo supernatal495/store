@@ -46,23 +46,15 @@
 </head>
 <body class="text-slate-200 antialiased min-h-screen flex flex-col">
 
-    <nav class="fixed top-0 w-full z-50 bg-dark-900/95 backdrop-blur-md border-b border-white/5 shadow-lg transition-all duration-300">
+    <nav class="fixed top-0 w-full z-50 bg-dark-900/90 backdrop-blur-xl border-b border-gold-400/20 shadow-2xl transition-all duration-300">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             
             <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
-                <div class="relative w-12 h-12 md:w-14 md:h-14 shrink-0">
-                    <div class="absolute inset-0 rounded-full insta-border p-[2px] shadow-lg shadow-gold-500/20">
-                        <div class="w-full h-full rounded-full bg-dark-900 border-2 border-dark-900 overflow-hidden">
-                            <img src="ico.jpg" alt="GaloFire Logo" class="w-full h-full object-cover">
-                        </div>
-                    </div>
-                </div>
-                
                 <div class="flex flex-col">
-                    <span class="font-bold text-xl md:text-2xl text-white tracking-wide uppercase leading-none">
+                    <span class="font-black text-2xl md:text-3xl text-white tracking-wide uppercase leading-none">
                         Galo<span class="text-gold-400">Fire</span>
                     </span>
-                    <span class="text-[10px] text-slate-400 tracking-widest uppercase">Barcelos</span>
+                    <span class="text-xs text-gold-400 tracking-widest uppercase font-semibold">Barcelos</span>
                 </div>
             </div> 
             
@@ -70,7 +62,7 @@
                 <a href="#galleryContainer" onclick="mostrarBaterias()" id="btnBaterias" class="px-4 py-2 sm:px-6 sm:py-3 text-base font-semibold rounded-full bg-gold-500 text-dark-900 hover:bg-gold-400 transition-colors">
                     <i class="fas fa-battery-three-quarters mr-1"></i> Baterias
                 </a>
-                <a href="#galleryContainer" onclick="mostrarBombinhas()" id="btnBombinhas" class="px-4 py-2 sm:px-6 sm:py-3 text-base font-semibold rounded-full bg-dark-800 text-slate-300 border border-slate-700 hover:bg-dark-700 transition-colors">
+                <a href="#galleryContainer" onclick="mostrarBombinhas()" id="btnBombinhas" class="px-4 py-2 sm:px-6 sm:py-3 text-base font-semibold rounded-full bg-dark-800 text-slate-300 border border-slate-700 hover:bg-dark-700 transition-colors animate-shake">
                     <i class="fas fa-bomb mr-1"></i> Bombinhas
                 </a>
             </div>
