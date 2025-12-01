@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     
     <title>GaloFire - Pirotecnia de Barcelos</title>
     <meta name="description" content="Catálogo GaloFire 2025. O melhor fogo de artifício e baterias em Barcelos. Qualidade premium e preços de revenda.">
@@ -102,7 +105,10 @@
         <p class="text-slate-500 text-sm">© 2025 GaloFire.</p>
     </footer>
 
-    <script src="dados.js"></script>
-    <script src="app.js" defer></script>
+    <script>
+        const timestamp = new Date().getTime();
+        document.write('<script src="dados.js?v=' + timestamp + '"><\/script>');
+        document.write('<script src="app.js?v=' + timestamp + '" defer><\/script>');
+    </script>
 </body>
 </html>
