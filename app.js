@@ -124,4 +124,114 @@ function carregarGaleria() {
 }
 
 // Inicia a galeria quando a janela carrega
-window.onload = carregarGaleria;
+// Inicia a galeria quando a janela carrega
+window.onload = function () {
+    carregarGaleria();
+    iniciarIntro();
+};
+
+/**
+ * SEQUENCIA DE INTRODUÇÃO BOMBASTICA
+ * 1. Rockets sobem (3 segundos)
+ * 2. Mensagem aparece (1 segundo)
+ * 3. Site revela-se
+ */
+function iniciarIntro() {
+    const overlay = document.getElementById('intro-overlay');
+    const container = document.getElementById('fireworks-container');
+    const message = document.getElementById('intro-message');
+
+    // 1. FASE DE FOGO (0s - 3s)
+    const intervaloLoop = setInterval(() => {
+        // CAOS TOTAL: 5 Foguetes de cada vez
+        lancarFoguete(container);
+        lancarFoguete(container);
+        lancarFoguete(container);
+        lancarFoguete(container);
+        lancarFoguete(container);
+    }, 150);
+
+    // 2. FASE DE MENSAGEM (Aos 2.5s - ajustado pelo user)
+    setTimeout(() => {
+        clearInterval(intervaloLoop);
+
+        // Revela a mensagem
+        message.classList.remove('opacity-0', 'scale-0');
+        message.classList.add('opacity-100', 'scale-100');
+
+        // 3. FASE FINAL
+        setTimeout(() => {
+            overlay.classList.add('fade-out');
+
+            setTimeout(() => {
+                overlay.remove();
+            }, 1000);
+
+        }, 1000);
+
+    }, 2500);
+}
+
+// Logica de lançar um foguete (baixo para cima)
+function lancarFoguete(container) {
+    if (!container) return;
+
+    const rocket = document.createElement('div');
+    rocket.className = 'rocket-particle';
+
+    // Posição inicial (Fundo do ecrã, posição X aleatória)
+    const startX = Math.random() * window.innerWidth;
+    rocket.style.left = startX + 'px';
+    rocket.style.bottom = '0px';
+
+    // Altura aleatória para explodir
+    const targetHeight = (window.innerHeight * 0.5) + (Math.random() * (window.innerHeight * 0.4));
+    // Converter para pixeis negativos para o transform translateY
+    rocket.style.setProperty('--rise-height', `-${targetHeight}px`);
+
+    container.appendChild(rocket);
+
+    // Quando a animação de subida acabar, EXPLODIR!
+    // Nota: O user tinha posto 200ms, mas isso corta a subida. 
+    // Coloquei 700ms para dar tempo de "subir" visualmente no telemóvel.
+    setTimeout(() => {
+        // Coordenadas da explosão
+        // O rocket subiu 'targetHeight' pixeis a partir de baixo.
+        // Y = Altura Janela - TargetHeight
+        const explosionY = window.innerHeight - targetHeight;
+
+        criarExplosao(container, startX, explosionY);
+        rocket.remove();
+    }, 700);
+}
+
+
+function criarExplosao(container, x, y) {
+    const cores = ['#FACC15', '#EAB308', '#EF4444', '#FFFFFF', '#3B82F6', '#10B981', '#D946EF']; // Mais cores festivas
+    const particulas = 40; // Mantive 40 para não crashar telemóveis (com 5 foguetes = 200 partículas/ciclo)
+
+    for (let i = 0; i < particulas; i++) {
+        const p = document.createElement('div');
+        p.className = 'firework-particle';
+
+        // Cor aleatória
+        p.style.backgroundColor = cores[Math.floor(Math.random() * cores.length)];
+
+        // Posição explosão
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+
+        // Direção aleatória
+        const angle = Math.random() * Math.PI * 2;
+        // VELOCIDADE MASSIVA: Explosões gigantes
+        const velocity = 80 + Math.random() * 200;
+
+        p.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
+        p.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
+
+        container.appendChild(p);
+
+        // Remove a partícula após a animação
+        setTimeout(() => p.remove(), 1000);
+    }
+}

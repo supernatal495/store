@@ -212,3 +212,61 @@ body {
     background-color: #334155;
     color: #94a3b8;
 }
+
+/*
+           Animação de Fogo de Artifício (Navbar)
+        */
+.firework-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Foguete a subir */
+.rocket-particle {
+    position: absolute;
+    width: 4px;
+    height: 15px;
+    background: linear-gradient(to top, rgba(255, 255, 0, 0), #FACC15);
+    border-radius: 2px;
+    animation: rise 1s ease-out forwards;
+    will-change: transform, opacity;
+    /* Otimização Mobile */
+}
+
+@keyframes rise {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(var(--rise-height)) scale(0.5);
+        opacity: 0;
+        /* Desaparece quando estoura */
+    }
+}
+
+.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
