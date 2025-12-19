@@ -141,7 +141,7 @@ function iniciarIntro() {
     const container = document.getElementById('fireworks-container');
     const message = document.getElementById('intro-message');
 
-    // 1. FASE DE FOGO (0s - 3s)
+    // 1. FASE DE FOGO ( Início )
     const intervaloLoop = setInterval(() => {
         // CAOS TOTAL: 5 Foguetes de cada vez
         lancarFoguete(container);
@@ -151,25 +151,25 @@ function iniciarIntro() {
         lancarFoguete(container);
     }, 150);
 
-    // 2. FASE DE MENSAGEM (Aos 2.5s - ajustado pelo user)
+    // 2. FASE DE MENSAGEM (Aparece logo aos 0.5s para leitura conjunta com o fogo)
     setTimeout(() => {
-        clearInterval(intervaloLoop);
-
-        // Revela a mensagem
+        // Revela a mensagem enquanto o fogo continua
         message.classList.remove('opacity-0', 'scale-0');
         message.classList.add('opacity-100', 'scale-100');
+    }, 500);
 
-        // 3. FASE FINAL
+    // 3. FIM DA FESTA (Aos 4.5s -> 4s de leitura/fogo)
+    setTimeout(() => {
+        clearInterval(intervaloLoop); // Pára os foguetes
+
+        // Desaparece tudo
+        overlay.classList.add('fade-out');
+
         setTimeout(() => {
-            overlay.classList.add('fade-out');
-
-            setTimeout(() => {
-                overlay.remove();
-            }, 1000);
-
+            overlay.remove();
         }, 1000);
 
-    }, 2500);
+    }, 4500);
 }
 
 // Logica de lançar um foguete (baixo para cima)
