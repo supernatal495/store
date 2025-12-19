@@ -1,7 +1,21 @@
+/**
+ * Base de Dados de Produtos
+ * 
+ * Estrutura do Objeto:
+ * - id: Identificador único (texto)
+ * - titulo: Nome do produto
+ * - desc: Descrição (ex: "36 Tiros")
+ * - preco: Preço em Euros (texto ou número)
+ * - imagem: Nome do ficheiro na pasta (ex: "1.png")
+ * - premium: true = Produto de destaque (Borda Ouro), false = Normal
+ * - stock: true = Disponível, false = Esgotado (Fica cinzento no site)
+ */
+
 const listaProdutos = [
+    // --- BATERIAS ---
     { id: "1", titulo: "Big Panda", desc: "36Tiros Calibre 20", preco: "30", imagem: "1.png", premium: true, stock: true },
     { id: "2", titulo: "Feliz Ano Novo", desc: "36Tiros Calibre18", preco: "25", imagem: "2.png", premium: false, stock: true },
-    { id: "3", titulo: "Mega Panda", desc: "100 Tiros Calibre 16", preco: "50", imagem: "10.png", premium: true, stock: false },
+    { id: "3", titulo: "Mega Panda", desc: "100 Tiros Calibre 16", preco: "50", imagem: "10.png", premium: true, stock: false }, // EXEMPLO: Sem stock
     { id: "4", titulo: "Festival Balls ou Sea Crab", desc: "48 Tiros Calibre 20", preco: "40", imagem: "3.png", premium: true, stock: true },
     { id: "5", titulo: "Gunfire", desc: "100Tiros Calbire 20", preco: "75", imagem: "4.png", premium: true, stock: true },
     { id: "6", titulo: "Happy Alfa", desc: "100 Tiros Calibre 16", preco: "45", imagem: "5.png", premium: false, stock: true },
@@ -9,10 +23,10 @@ const listaProdutos = [
     { id: "8", titulo: "Happy Panda", desc: "36Tiros Calibre16", preco: "20", imagem: "7.png", premium: false, stock: true },
     { id: "9", titulo: "Bateria Anti-Area", desc: "81 Disparos", preco: "10", imagem: "9.png", premium: false, stock: true },
     { id: "", titulo: "Pro", desc: "222 Tiros Calibre 20", preco: "175", imagem: "8.png", premium: true, stock: true },
-
 ];
 
 const listaPetardos = [
+    // --- BOMBINHAS / PETARDOS ---
     { id: "1", titulo: "Tracas", desc: "1 UNIDADE", preco: "1", imagem: "1.png", premium: false, stock: true },
     { id: "2", titulo: "25 Pk2", desc: "", preco: "6", imagem: "2.png", premium: false, stock: true },
     { id: "3", titulo: "P2", desc: "Caixa P2 10 UNIDADES", preco: "10", imagem: "3.png", premium: false, stock: true },

@@ -2,8 +2,14 @@
 <html lang="pt" class="scroll-smooth">
 
 <head>
+    <!-- 
+        Ficha Técnica e Metadados 
+        Configurações essenciais para SEO, responsividade e cache.
+    -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Controlo de Cache (Para garantir que atualizações são vistas imediatamente) -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -12,17 +18,27 @@
     <meta name="description" content="Catálogo GaloFire 2025.">
     <meta name="theme-color" content="#0f172a">
 
+    <!-- Open Graph (Para partilhas bonitas no Facebook/WhatsApp) -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="GaloFire - Barcelos tem o Galo, nós tratamos do estalo!">
     <meta property="og:description" content="Veja o nosso catálogo 2025.">
     <meta property="og:image" content="https://galofire.pages.dev/image_e91485.jpg">
     <link rel="icon" type="image/jpeg" href="image_e91485.jpg">
 
+    <!-- 
+        Bibliotecas Externas (CDNs)
+        - Tailwind CSS: Framework de estilos utilitários
+        - FontAwesome: Ícones
+        - Google Fonts: Tipo de letra 'Outfit'
+    -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Nossos Estilos Personalizados -->
     <link rel="stylesheet" href="style.css">
 
+    <!-- Configuração do Tailwind -->
     <script>
         tailwind.config = {
             theme: {
@@ -49,10 +65,15 @@
 
 <body class="text-slate-200 antialiased min-h-screen flex flex-col">
 
+    <!-- 
+        Menu de Navegação Fixo 
+        Contém o logótipo e ícones sociais.
+    -->
     <nav
         class="fixed top-0 w-full z-50 bg-dark-900/90 backdrop-blur-xl border-b border-gold-400/20 shadow-2xl transition-all duration-300">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
 
+            <!-- Logótipo (clicável para ir ao topo) -->
             <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
                 <div class="flex flex-col">
                     <span class="font-black text-2xl md:text-3xl text-white tracking-wide uppercase leading-none">
@@ -69,6 +90,10 @@
         </div>
     </nav>
 
+    <!-- 
+        Cabeçalho Principal (Hero Section)
+        Apresenta o título principal e o slogan animado.
+    -->
     <header class="pt-32 pb-8 px-4 text-center animate-fade-in-down">
         <h1 class="logo-glow text-6xl md:text-8xl font-black text-white mb-6 uppercase tracking-tight relative z-10">
             Galo<span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-orange-500">Fire</span>
@@ -80,9 +105,13 @@
         </p>
     </header>
 
+    <!-- 
+        Conteúdo Principal 
+        Contém as abas de navegação e a grelha de produtos.
+    -->
     <main class="container mx-auto px-4 pb-20 flex-grow">
 
-        <!-- NOVA NAVEGAÇÃO POR ABAS -->
+        <!-- NOVA NAVEGAÇÃO POR ABAS (Mobile First Sticky) -->
         <div class="flex justify-center mb-10 sticky top-24 z-40">
             <div class="glass-tabs p-1 rounded-full inline-flex relative shadow-2xl">
                 <button onclick="mudarAba('baterias')" id="tabBaterias"
@@ -96,9 +125,11 @@
             </div>
         </div>
 
+        <!-- Container onde os produtos são injetados pelo JavaScript -->
         <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         </div>
 
+        <!-- Indicador de Loading inicial -->
         <div id="loadingState" class="text-center py-20">
             <i class="fas fa-circle-notch fa-spin text-3xl text-gold-500"></i>
             <p class="text-slate-500 mt-2">A carregar produtos...</p>
@@ -111,6 +142,10 @@
         <p class="text-slate-500 text-sm">© 2025 GaloFire.</p>
     </footer>
 
+    <!-- 
+        Scripts do Site
+        O timestamp é usado para prevenir que o browser guarde versões antigas dos dados (Cache Busting).
+    -->
     <script>
         const timestamp = new Date().getTime();
         document.write('<script src="dados.js?v=' + timestamp + '"><\/script>');

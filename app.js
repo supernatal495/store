@@ -1,83 +1,110 @@
+// Estado global para controlar a aba ativa (baterias vs bombinhas)
 let tipoAtual = 'baterias';
 
+/**
+ * Funcao para mudar a aba ativa
+ * @param {string} novoTipo - 'baterias' ou 'bombinhas'
+ */
 function mudarAba(novoTipo) {
     tipoAtual = novoTipo;
-    carregarGaleria();
+    carregarGaleria(); // Recarrega os dados
 
-    // Atualizar UI das Abas
+    // Obter referências aos botões
     const btnBaterias = document.getElementById('tabBaterias');
     const btnBombinhas = document.getElementById('tabBombinhas');
 
+    // Classes CSS (Tailwind) para estados Ativo e Inativo
+    // Nota: 'active-tab' contem estilos extra no style.css
+    const classesAtivo = 'tab-btn active-tab px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold transition-all duration-300 flex items-center gap-2 rounded-full';
+    const classesInativo = 'tab-btn px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 rounded-full';
+
+    // Aplica as classes consoante a seleção
     if (tipoAtual === 'baterias') {
-        btnBaterias.className = 'tab-btn active-tab px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold transition-all duration-300 flex items-center gap-2 rounded-full';
-        btnBombinhas.className = 'tab-btn px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 rounded-full';
+        btnBaterias.className = classesAtivo;
+        btnBombinhas.className = classesInativo;
     } else {
-        btnBaterias.className = 'tab-btn px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 rounded-full';
-        btnBombinhas.className = 'tab-btn active-tab px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold transition-all duration-300 flex items-center gap-2 rounded-full';
+        btnBaterias.className = classesInativo;
+        btnBombinhas.className = classesAtivo;
     }
 }
 
+/**
+ * Função Principal de Renderização
+ * Le os dados (listaProdutos ou listaPetardos) e gera o HTML.
+ */
 function carregarGaleria() {
     const container = document.getElementById('galleryContainer');
     const loading = document.getElementById('loadingState');
 
-    // Remove o loading
+    // Esconde a animação de loading
     loading.style.display = 'none';
 
+    // Seleciona a lista de dados e a pasta de imagens correta
     const produtos = tipoAtual === 'baterias' ? listaProdutos : listaPetardos;
     const pastaImagem = tipoAtual === 'baterias' ? 'baterias' : 'petardo';
 
+    // Validação de segurança se a lista estiver vazia
     if (typeof produtos === 'undefined' || produtos.length === 0) {
         container.innerHTML = '<div class="col-span-full text-center text-slate-500 mt-10">Sem produtos.</div>';
         return;
     }
 
     let html = "";
+
+    // Loop através de cada produto para criar o cartão
     produtos.forEach(prod => {
         let badgePremium = "";
         let classPremium = "";
         let classEstoque = "";
         let badgeEsgotado = "";
 
-        // Classes de Destaque Premium
+        // Classes padrão para Título, Preço e Símbolo Euro
         let titleColorClass = 'text-white group-hover:text-gold-400';
         let priceColorClass = 'text-slate-200';
         let euroColorClass = 'text-gold-500';
 
+        // Lógica: Determinar se o título começa por número (ex: "36 Tiros")
         let primeiraPalavra = prod.desc.split(' ')[0];
         let textoTag = primeiraPalavra;
-
         if (!isNaN(primeiraPalavra)) {
             textoTag += " Tiros";
         }
 
-        // Lógica de Stock
-        const temStock = typeof prod.stock !== 'undefined' ? prod.stock : true; // Default true para compatibilidade
+        // --- SISTEMA DE STOCK ---
+        // Verifica se existe a propriedade stock (default true)
+        const temStock = typeof prod.stock !== 'undefined' ? prod.stock : true;
 
         if (!temStock) {
-            classEstoque = "out-of-stock pointer-events-none"; // pointer-events-none impede cliques
-            badgeEsgotado = `<div class="absolute inset-0 z-10"></div>`; // Div extra se necessário
+            // Se não tiver stock:
+            // 1. Aplica classe CSS que mete a cinzento e bloqueia cliques
+            classEstoque = "out-of-stock pointer-events-none";
+            // 2. Cria div vazia para ajudar no posicionamento do carimbo (opcional)
+            badgeEsgotado = `<div class="absolute inset-0 z-10"></div>`;
         }
 
+        // --- SISTEMA PREMIUM ---
         if (prod.premium === true) {
+            // Se for Premium: adiciona borda dourada e badge "Coroa"
             badgePremium = `
                 <div class="absolute top-0 left-0 bg-gradient-to-r from-gold-500 to-yellow-700 text-black text-[10px] font-black px-3 py-1 rounded-br-xl shadow-lg uppercase tracking-wider z-20">
                     <i class="fas fa-crown mr-1"></i> Premium
                 </div>`;
             classPremium = "premium-border";
 
-            // Aumentar destaque para o Premium
+            // Muda as cores do texto para Dourado
             titleColorClass = 'text-gold-400';
             priceColorClass = 'text-gold-400';
             euroColorClass = 'text-gold-400';
         }
 
+        // Constrói o HTML do Cartão
         html += `
             <div class="product-card rounded-2xl overflow-hidden group product-item ${classPremium} ${classEstoque} relative">
                 <div class="image-wrapper relative">
                     ${badgePremium}
                     ${badgeEsgotado}
                     
+                    <!-- Imagem com Lazy Loading e Fallback de erro -->
                     <img src="${pastaImagem}/${prod.imagem}" 
                             loading="lazy" 
                             onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=GaloFire'" 
@@ -91,7 +118,10 @@ function carregarGaleria() {
             </div>
         `;
     });
+
+    // Injeta o HTML no DOM
     container.innerHTML = html;
 }
 
+// Inicia a galeria quando a janela carrega
 window.onload = carregarGaleria;
