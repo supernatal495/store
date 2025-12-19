@@ -1,70 +1,185 @@
+body {
+    background-color: #020617;
+    /* Fundo mais rico e profundo */
+    background-image:
+        radial-gradient(circle at 50% 0%, rgba(234, 179, 8, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 100% 0%, rgba(220, 38, 38, 0.1) 0%, transparent 30%),
+        radial-gradient(circle at 0% 100%, rgba(234, 179, 8, 0.1) 0%, transparent 30%),
+        url('ico.jpg'),
+        radial-gradient(#020617 40%, #0f172a 100%);
+    background-size: cover, cover, cover, 300px 300px, cover;
+    background-position: center top, top right, bottom left, center center, center center;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat, no-repeat;
+    background-blend-mode: screen, screen, screen, overlay, normal;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
 
-        body {
-            background-color: #020617;
-            background-image: url('ico.jpg'), 
-                              radial-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.95)),
-                              radial-gradient(at 0% 0%, rgba(234, 179, 8, 0.1) 0px, transparent 50%),
-                              radial-gradient(at 100% 100%, rgba(220, 38, 38, 0.05) 0px, transparent 50%);
-            background-size: 200px 200px, cover, cover, cover;
-            background-position: center center, center center, 0% 0%, 100% 100%;
-            background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-            background-attachment: fixed;
-        }
-        
-        /* Melhoria Visual nos Cards */
-        .product-card {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-        
-        @media (min-width: 768px) {
-            .product-card:hover {
-                transform: translateY(-8px);
-                border-color: rgba(234, 179, 8, 0.4);
-                box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-                background: rgba(30, 41, 59, 0.8);
-            }
-            .product-card:hover .product-image { transform: scale(1.1); }
-        }
+/* Logo com Efeito Neon/Glow */
+.logo-glow {
+    text-shadow:
+        0 0 10px rgba(234, 179, 8, 0.3),
+        0 0 20px rgba(234, 179, 8, 0.2),
+        0 0 40px rgba(234, 179, 8, 0.1);
+    filter: drop-shadow(0 0 15px rgba(234, 179, 8, 0.4));
+}
 
-        .image-wrapper { aspect-ratio: 1/1; overflow: hidden; position: relative; background: #0f172a; display: flex; align-items: center; justify-content: center; padding: 10px; }
-        .product-image { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.7s ease; }
-        @media (min-width: 640px) {
-            .image-wrapper { aspect-ratio: 4/3; padding: 15px; }
-        }
-        
-        .premium-border {
-            /* Destaque premium mais forte */
-            border: 2px solid #EAB308;
-            box-shadow: 0 0 30px rgba(234, 179, 8, 0.4);
-        }
-        
-        .insta-border {
-            background: linear-gradient(45deg, #CA8A04 0%, #EAB308 50%, #FACC15 100%); 
-        }
+/* Reforçar contraste do subtítulo */
+.subtitle-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
 
-        /* Botão Flutuante Instagram */
-        .insta-float {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            z-index: 100;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
-        .insta-gradient {
-            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-2px); }
-            75% { transform: translateX(2px); }
-        }
-        
-        .animate-shake {
-            animation: shake 0.5s ease-in-out infinite;
-        }
-    
+/* Melhoria Visual nos Cards */
+.product-card {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 768px) {
+    .product-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(234, 179, 8, 0.4);
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+        background: rgba(30, 41, 59, 0.8);
+    }
+
+    .product-card:hover .product-image {
+        transform: scale(1.1);
+    }
+}
+
+.image-wrapper {
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    position: relative;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.product-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.7s ease;
+}
+
+@media (min-width: 640px) {
+    .image-wrapper {
+        aspect-ratio: 4/3;
+        padding: 15px;
+    }
+}
+
+.premium-border {
+    /* Destaque premium mais forte */
+    border: 2px solid #EAB308;
+    box-shadow: 0 0 30px rgba(234, 179, 8, 0.4);
+}
+
+.insta-border {
+    background: linear-gradient(45deg, #CA8A04 0%, #EAB308 50%, #FACC15 100%);
+}
+
+/* Botão Flutuante Instagram */
+.insta-float {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.insta-gradient {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-2px);
+    }
+
+    75% {
+        transform: translateX(2px);
+    }
+}
+
+.animate-shake {
+    animation: shake 0.5s ease-in-out infinite;
+}
+
+/* --- NOVOS ESTILOS PARA ABAS E STOCK --- */
+
+/* Abas de Navegação - High Visibility */
+.glass-tabs {
+    background: rgba(15, 23, 42, 0.95);
+    /* Fundo quase opaco */
+    border: 2px solid rgba(234, 179, 8, 0.3);
+    /* Borda dourada subtil */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 8px;
+    /* Mais espaço à volta */
+}
+
+.tab-btn {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+}
+
+.tab-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+}
+
+.tab-btn.active-tab {
+    background-color: #EAB308;
+    /* Gold 500 */
+    color: #000000;
+    /* Preto para contraste máximo */
+    box-shadow: 0 0 20px rgba(234, 179, 8, 0.6);
+    /* Glow forte */
+    opacity: 1;
+    transform: scale(1.05);
+    /* Ligeiro aumento */
+}
+
+/* Produto Sem Stock */
+.out-of-stock .product-image {
+    filter: grayscale(100%) opacity(0.6);
+}
+
+.out-of-stock .image-wrapper::after {
+    content: "ESGOTADO";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #ef4444;
+    color: #ef4444;
+    padding: 10px 20px;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    z-index: 30;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+
+.out-of-stock-badge {
+    background-color: #334155;
+    color: #94a3b8;
+}

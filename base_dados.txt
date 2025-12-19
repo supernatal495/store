@@ -1,8 +1,0 @@
-1;Big Panda-36Tiros Calibre 20-30
-2;Feliz Ano Novo-36Tiros Calibre18-25
-3;Festival Balls ou Sea Crab-48 Tiros Calibre 20-40
-4;Gunfire-100Tiros Calbire 20-75
-5;Happy Alfa-100 Tiros Calibre 16-40
-6;Happy Alfa-49Tiros Calibre16-30
-7;Happy Panda-36Tiros Calibre16-20
-8;Pro-222 Tiros Calibre 20-175

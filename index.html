@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    
+
     <title>GaloFire - Pirotecnia de Barcelos</title>
-    <meta name="description" content="Catálogo GaloFire 2025. O melhor fogo de artifício e baterias em Barcelos. Qualidade premium e preços de revenda.">
+    <meta name="description"
+        content="Catálogo GaloFire 2025. O melhor fogo de artifício e baterias em Barcelos. Qualidade premium e preços de revenda.">
     <meta name="theme-color" content="#0f172a">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="GaloFire - Barcelos tem o Galo, nós tratamos do estalo!">
     <meta property="og:description" content="Veja o nosso catálogo 2025. Baterias Premium e Pirotecnia Profissional.">
-    <meta property="og:image" content="https://galofire.pages.dev/image_e91485.jpg"> <link rel="icon" type="image/jpeg" href="image_e91485.jpg">
+    <meta property="og:image" content="https://galofire.pages.dev/image_e91485.jpg">
+    <link rel="icon" type="image/jpeg" href="image_e91485.jpg">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -44,11 +47,13 @@
         }
     </script>
 </head>
+
 <body class="text-slate-200 antialiased min-h-screen flex flex-col">
 
-    <nav class="fixed top-0 w-full z-50 bg-dark-900/90 backdrop-blur-xl border-b border-gold-400/20 shadow-2xl transition-all duration-300">
+    <nav
+        class="fixed top-0 w-full z-50 bg-dark-900/90 backdrop-blur-xl border-b border-gold-400/20 shadow-2xl transition-all duration-300">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            
+
             <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
                 <div class="flex flex-col">
                     <span class="font-black text-2xl md:text-3xl text-white tracking-wide uppercase leading-none">
@@ -56,35 +61,45 @@
                     </span>
                     <span class="text-xs text-gold-400 tracking-widest uppercase font-semibold">Barcelos</span>
                 </div>
-            </div> 
-            
-            <div class="flex space-x-3">
-                <a href="#galleryContainer" onclick="mostrarBaterias()" id="btnBaterias" class="px-4 py-2 sm:px-6 sm:py-3 text-base font-semibold rounded-full bg-gold-500 text-dark-900 hover:bg-gold-400 transition-colors">
-                    <i class="fas fa-battery-three-quarters mr-1"></i> Baterias
-                </a>
-                <a href="#galleryContainer" onclick="mostrarBombinhas()" id="btnBombinhas" class="px-4 py-2 sm:px-6 sm:py-3 text-base font-semibold rounded-full bg-dark-800 text-slate-300 border border-slate-700 hover:bg-dark-700 transition-colors animate-shake">
-                    <i class="fas fa-bomb mr-1"></i> Bombinhas
-                </a>
             </div>
-            
+
+            <div class="flex space-x-3">
+                <!-- Ícones Sociais removidos a pedido -->
+            </div>
+
         </div>
     </nav>
 
-    <header class="pt-32 pb-12 px-4 text-center animate-fade-in-down">
-        <h1 class="text-5xl md:text-7xl font-black text-white mb-4 uppercase tracking-tight drop-shadow-xl">
+    <header class="pt-32 pb-8 px-4 text-center animate-fade-in-down">
+        <h1 class="logo-glow text-6xl md:text-8xl font-black text-white mb-6 uppercase tracking-tight relative z-10">
             Galo<span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-orange-500">Fire</span>
         </h1>
-        
-        <p class="text-slate-400 text-lg md:text-2xl mb-8 italic font-light px-2">
+
+        <p class="subtitle-shadow text-slate-300 text-xl md:text-2xl mb-8 italic font-light px-2">
             <i class="fas fa-fire text-gold-500 mr-2"></i>
             "Barcelos tem o Galo, nós tratamos do estalo!"
         </p>
     </header>
 
     <main class="container mx-auto px-4 pb-20 flex-grow">
-        <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+        <!-- NOVA NAVEGAÇÃO POR ABAS -->
+        <div class="flex justify-center mb-10 sticky top-24 z-40">
+            <div class="glass-tabs p-1 rounded-full inline-flex relative shadow-2xl">
+                <button onclick="mudarAba('baterias')" id="tabBaterias"
+                    class="tab-btn active-tab px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold transition-all duration-300 flex items-center gap-2 rounded-full">
+                    <i class="fas fa-battery-three-quarters"></i> Baterias
+                </button>
+                <button onclick="mudarAba('bombinhas')" id="tabBombinhas"
+                    class="tab-btn px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 rounded-full">
+                    <i class="fas fa-bomb"></i> Bombinhas
+                </button>
             </div>
-        
+        </div>
+
+        <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        </div>
+
         <div id="loadingState" class="text-center py-20">
             <i class="fas fa-circle-notch fa-spin text-3xl text-gold-500"></i>
             <p class="text-slate-500 mt-2">A carregar produtos...</p>
@@ -103,4 +118,5 @@
         document.write('<script src="app.js?v=' + timestamp + '" defer><\/script>');
     </script>
 </body>
+
 </html>

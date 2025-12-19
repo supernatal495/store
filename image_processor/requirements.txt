@@ -1,4 +1,0 @@
-rembg
-pillow
-pillow-heif
-onnxruntime
