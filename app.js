@@ -54,6 +54,7 @@ function carregarGaleria() {
     // Loop através de cada produto para criar o cartão
     produtos.forEach(prod => {
         let badgePremium = "";
+        let badgePoucasUnidades = "";
         let classPremium = "";
         let classEstoque = "";
         let badgeEsgotado = "";
@@ -82,6 +83,15 @@ function carregarGaleria() {
             badgeEsgotado = `<div class="absolute inset-0 z-10"></div>`;
         }
 
+        // --- SISTEMA POUCAS UNIDADES ---
+        const isPoucasUnidades = typeof prod.poucasUnidades !== 'undefined' ? prod.poucasUnidades : false;
+        if (isPoucasUnidades && temStock) {
+            badgePoucasUnidades = `
+                <div class="absolute top-0 right-0 bg-gradient-to-r from-red-600 to-orange-600 text-white text-[10px] font-black px-3 py-1 rounded-bl-xl shadow-lg uppercase tracking-wider z-20">
+                    <i class="fas fa-fire-alt mr-1"></i> Poucas Unidades
+                </div>`;
+        }
+
         // --- SISTEMA PREMIUM ---
         if (prod.premium === true) {
             // Se for Premium: adiciona borda dourada e badge "Coroa"
@@ -102,6 +112,7 @@ function carregarGaleria() {
             <div class="product-card rounded-2xl overflow-hidden group product-item ${classPremium} ${classEstoque} relative">
                 <div class="image-wrapper relative">
                     ${badgePremium}
+                    ${badgePoucasUnidades}
                     ${badgeEsgotado}
                     
                     <!-- Imagem com Lazy Loading e Fallback de erro -->
