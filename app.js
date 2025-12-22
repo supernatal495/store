@@ -96,7 +96,7 @@ function carregarGaleria() {
         if (prod.premium === true) {
             // Se for Premium: adiciona borda dourada e badge "Coroa"
             badgePremium = `
-                <div class="absolute top-0 left-0 bg-gradient-to-r from-gold-500 to-yellow-700 text-black text-[10px] font-black px-3 py-1 rounded-br-xl shadow-lg uppercase tracking-wider z-20">
+                <div class="absolute top-0 left-0 bg-gradient-to-r from-gold-500 to-yellow-700 text-black text-xs font-black px-4 py-1.5 rounded-br-xl shadow-lg uppercase tracking-wider z-20">
                     <i class="fas fa-crown mr-1"></i> Premium
                 </div>`;
             classPremium = "premium-border";
