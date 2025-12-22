@@ -87,7 +87,7 @@ function carregarGaleria() {
         const isPoucasUnidades = typeof prod.poucasUnidades !== 'undefined' ? prod.poucasUnidades : false;
         if (isPoucasUnidades && temStock) {
             badgePoucasUnidades = `
-                <div class="absolute top-0 right-0 bg-gradient-to-r from-red-600 to-orange-600 text-white text-[10px] font-black px-3 py-1 rounded-bl-xl shadow-lg uppercase tracking-wider z-20">
+                <div class="absolute top-0 right-0 bg-gradient-to-r from-red-600 to-orange-600 text-white text-xs font-black px-4 py-1.5 rounded-bl-xl shadow-lg uppercase tracking-wider z-20 animate-pulse-alert">
                     <i class="fas fa-fire-alt mr-1"></i> Poucas Unidades
                 </div>`;
         }
