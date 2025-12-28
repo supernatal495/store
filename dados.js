@@ -23,7 +23,7 @@ const listaProdutos = [
     { id: "7", titulo: "Happy Alfa", desc: "49Tiros Calibre16", preco: "30", imagem: "6.png", premium: false, stock: true, poucasUnidades: false },
     { id: "8", titulo: "Happy Panda", desc: "36Tiros Calibre16", preco: "20", imagem: "7.png", premium: false, stock: true, poucasUnidades: false },
     { id: "9", titulo: "Bateria Anti-Area", desc: "81 Disparos", preco: "10", imagem: "9.png", premium: false, stock: true, poucasUnidades: false },
-    { id: "", titulo: "Pro", desc: "222 Tiros Calibre 20", preco: "175", imagem: "8.png", premium: true, stock: true, poucasUnidades: true },
+    { id: "", titulo: "Pro", desc: "222 Tiros Calibre 20", preco: "175", imagem: "8.png", premium: true, stock: false, poucasUnidades: false },
 ];
 
 const listaPetardos = [
