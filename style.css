@@ -1,88 +1,136 @@
 /*
-   GaloFire — Design System
-   Dark Mode & Gold (Forte, Limpo e Direto)
+   GaloFire — NOVA CAMPANHA 2026
+   Pyro Obsidian, Molten Gold & Crimson Fire Theme
 */
 
 body {
-    background-color: #05060a;
+    background-color: #040508;
     background-image:
-        radial-gradient(circle at 50% 0%, rgba(234, 179, 8, 0.18) 0%, transparent 55%),
-        radial-gradient(circle at 100% 0%, rgba(234, 88, 12, 0.12) 0%, transparent 35%),
-        linear-gradient(rgba(5, 6, 10, 0.86), rgba(5, 6, 10, 0.92)),
-        url('ico.jpg');
-    background-size: cover, cover, cover, 260px 260px;
-    background-position: center top, top right, center center, center center;
-    background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+        radial-gradient(ellipse 85% 50% at 50% -5%, rgba(234, 88, 12, 0.32) 0%, rgba(220, 38, 38, 0.12) 40%, transparent 70%),
+        radial-gradient(circle at 90% 20%, rgba(250, 204, 21, 0.14) 0%, transparent 40%),
+        radial-gradient(circle at 10% 80%, rgba(234, 88, 12, 0.15) 0%, transparent 45%),
+        linear-gradient(180deg, #040508 0%, #090d16 50%, #040508 100%);
+    background-attachment: scroll;
     overflow-x: hidden;
 }
 
-/* Navbar */
+/* Faixa de Topo Animada (Ticker Nova Campanha 2026) */
+.campaign-ticker {
+    background: linear-gradient(90deg, #FACC15 0%, #F97316 50%, #FACC15 100%);
+    box-shadow: 0 2px 20px rgba(249, 115, 22, 0.5);
+}
+
+.ticker-track {
+    display: inline-flex;
+    animation: ticker-scroll 18s linear infinite;
+}
+
+@keyframes ticker-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Badge Hero Nova Campanha 2026 */
+.campaign-hero-badge {
+    background: linear-gradient(135deg, #DC2626 0%, #EA580C 50%, #EAB308 100%);
+    border: 1.5px solid #FEF08A;
+    box-shadow: 0 0 25px rgba(234, 88, 12, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    animation: pulse-campaign 2s infinite ease-in-out;
+}
+
+@keyframes pulse-campaign {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(234, 88, 12, 0.6);
+    }
+    50% {
+        transform: scale(1.04);
+        box-shadow: 0 0 35px rgba(250, 204, 21, 0.85);
+    }
+}
+
+/* Navbar Vidro Escuro */
 .nav-glass {
-    background: rgba(5, 6, 10, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(4, 5, 8, 0.9);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 }
 
-/* Selo Nova Campanha 2026 */
-.campaign-banner {
-    background: linear-gradient(135deg, #FACC15 0%, #F97316 100%);
-    box-shadow: 0 0 25px rgba(249, 115, 22, 0.5);
-}
-
-/* Efeitos de Título */
-.logo-glow {
-    text-shadow:
-        0 0 15px rgba(234, 179, 8, 0.35),
-        0 0 35px rgba(234, 88, 12, 0.2);
-}
-
-.subtitle-shadow {
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
-}
-
+/* Hero Spotlight & Texto Fogo */
 .hero-spotlight {
     position: absolute;
-    top: 40%;
+    top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 300px;
-    height: 150px;
-    background: radial-gradient(circle, rgba(234, 179, 8, 0.22) 0%, transparent 70%);
-    filter: blur(25px);
+    width: 360px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.38) 0%, rgba(250, 204, 21, 0.15) 45%, transparent 75%);
+    filter: blur(28px);
     pointer-events: none;
     z-index: -1;
 }
 
-/* Abas de Navegação */
+.hero-fire-text {
+    background: linear-gradient(135deg, #FEF08A 0%, #FACC15 35%, #F97316 70%, #EF4444 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 28px rgba(249, 115, 22, 0.55));
+}
+
+/* Seletor de Abas Cyber/Pyro */
 .cyber-tabs {
-    background: rgba(11, 15, 25, 0.96);
-    border: 2px solid rgba(234, 179, 8, 0.35);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    background: rgba(9, 13, 22, 0.96);
+    border: 1px solid rgba(250, 204, 21, 0.3);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.tab-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-badge {
+    font-size: 0.7rem;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    font-weight: 800;
 }
 
 .tab-btn.active-tab {
-    background: linear-gradient(135deg, #FACC15 0%, #EAB308 100%);
-    color: #000000;
-    box-shadow: 0 0 20px rgba(234, 179, 8, 0.55);
+    background: linear-gradient(135deg, #FACC15 0%, #F97316 100%);
+    color: #040508;
+    box-shadow: 0 0 25px rgba(249, 115, 22, 0.6);
 }
 
-/* Cartões de Produto */
+.tab-btn.active-tab .tab-badge {
+    background: rgba(4, 5, 8, 0.85);
+    color: #FACC15;
+}
+
+/* Cartões de Produto (Visual de Vitrine de Elite) */
 .product-card {
-    background: rgba(11, 15, 25, 0.94);
+    background: linear-gradient(165deg, rgba(17, 24, 39, 0.96) 0%, rgba(9, 13, 22, 0.99) 100%);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-    transition: transform 0.25s ease, border-color 0.25s ease;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.65);
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .product-card:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
 }
 
 @media (min-width: 768px) {
     .product-card:hover {
         transform: translateY(-6px);
-        border-color: rgba(234, 179, 8, 0.45);
-        box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.75);
+        border-color: rgba(250, 204, 21, 0.5);
+        box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.85), 0 0 22px rgba(234, 179, 8, 0.18);
     }
 
     .product-card:hover .product-image {
@@ -90,57 +138,101 @@ body {
     }
 }
 
-/* Destaque Top / Premium */
-.premium-border {
-    border: 2px solid #EAB308;
-    box-shadow: 0 0 25px rgba(234, 179, 8, 0.28);
+/* Cartão Premium (Borda Ouro Incandescente) */
+.premium-card {
+    background: linear-gradient(165deg, rgba(35, 24, 10, 0.96) 0%, rgba(9, 13, 22, 0.99) 65%);
+    border: 1.5px solid rgba(250, 204, 21, 0.7);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.8), 0 0 24px rgba(234, 179, 8, 0.24);
 }
 
-/* Palco da Imagem */
+/* Badge NOVO 2026 */
+.badge-novo-2026 {
+    background: linear-gradient(135deg, #EF4444 0%, #F97316 100%);
+    color: #ffffff;
+    border: 1px solid rgba(254, 240, 138, 0.6);
+    box-shadow: 0 0 14px rgba(239, 68, 68, 0.65);
+}
+
+/* Palco da Imagem com Spotlight Radial */
 .image-wrapper {
     aspect-ratio: 1 / 1;
     overflow: hidden;
     position: relative;
-    background: radial-gradient(circle at 50% 55%, rgba(234, 179, 8, 0.14) 0%, #070a12 75%);
+    background: radial-gradient(circle at 50% 55%, rgba(250, 204, 21, 0.16) 0%, rgba(15, 23, 42, 0.4) 55%, #060911 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px;
 }
 
-.premium-border .image-wrapper {
-    background: radial-gradient(circle at 50% 55%, rgba(249, 115, 22, 0.22) 0%, rgba(234, 179, 8, 0.1) 45%, #070a12 80%);
-}
-
-@media (min-width: 640px) {
-    .image-wrapper {
-        aspect-ratio: 4 / 3;
-        padding: 15px;
-    }
+.premium-card .image-wrapper {
+    background: radial-gradient(circle at 50% 55%, rgba(249, 115, 22, 0.28) 0%, rgba(234, 179, 8, 0.14) 45%, #060911 100%);
 }
 
 .product-image {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    transition: transform 0.4s ease;
-    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.7));
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.75));
 }
 
+/* Etiquetas Técnicas (Tiros / Calibre / Unidades) */
+.spec-pill {
+    font-size: 0.65rem;
+    line-height: 1;
+    padding: 4px 7px;
+    border-radius: 6px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e2e8f0;
+}
+
+.spec-pill-gold {
+    background: rgba(250, 204, 21, 0.15);
+    border-color: rgba(250, 204, 21, 0.4);
+    color: #FEF08A;
+}
+
+@media (min-width: 640px) {
+    .spec-pill {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+}
+
+/* Botão / Bloco de Preço */
+.price-box {
+    background: linear-gradient(90deg, rgba(250, 204, 21, 0.14) 0%, rgba(249, 115, 22, 0.2) 100%);
+    border: 1px solid rgba(250, 204, 21, 0.35);
+}
+
+.premium-card .price-box {
+    background: linear-gradient(135deg, #FACC15 0%, #F97316 100%);
+    border-color: transparent;
+    color: #040508;
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.35);
+}
+
+/* Modal Spotlight */
 .modal-spotlight {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 50% 50%, rgba(234, 179, 8, 0.22) 0%, transparent 70%);
+    background: radial-gradient(circle at 50% 50%, rgba(249, 115, 22, 0.3) 0%, rgba(250, 204, 21, 0.12) 45%, transparent 75%);
     pointer-events: none;
 }
 
 /* Estado Esgotado */
 .out-of-stock {
-    opacity: 0.7;
+    opacity: 0.72;
+    border-color: rgba(255, 255, 255, 0.05);
 }
 
 .out-of-stock .product-image {
-    filter: grayscale(100%) opacity(0.5);
+    filter: grayscale(100%) opacity(0.45);
 }
 
 .out-of-stock .image-wrapper::after {
@@ -149,7 +241,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-15deg);
-    background: rgba(0, 0, 0, 0.88);
+    background: rgba(0, 0, 0, 0.9);
     border: 2px solid #ef4444;
     color: #ef4444;
     padding: 6px 12px;
@@ -171,7 +263,7 @@ body {
     }
 }
 
-/* Partículas Intro */
+/* Animação de Fogo de Artifício (Intro) */
 .firework-particle {
     position: absolute;
     width: 4px;
@@ -187,6 +279,7 @@ body {
         transform: translate(0, 0) scale(1);
         opacity: 1;
     }
+
     100% {
         transform: translate(var(--tx), var(--ty)) scale(0);
         opacity: 0;
@@ -208,9 +301,11 @@ body {
         transform: translateY(0) scale(1);
         opacity: 1;
     }
+
     50% {
         opacity: 1;
     }
+
     100% {
         transform: translateY(var(--rise-height)) scale(0.5);
         opacity: 0;

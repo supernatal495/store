@@ -7,13 +7,19 @@ let produtosRenderizados = [];
  */
 function mudarAba(novoTipo) {
     tipoAtual = novoTipo;
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput && searchInput.value) {
+        searchInput.value = '';
+    }
+
     carregarGaleria();
 
     const btnBaterias = document.getElementById('tabBaterias');
     const btnBombinhas = document.getElementById('tabBombinhas');
 
-    const classesAtivo = 'tab-btn active-tab px-6 py-2.5 text-xs sm:px-9 sm:py-3 sm:text-base font-extrabold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 rounded-full';
-    const classesInativo = 'tab-btn px-6 py-2.5 text-xs sm:px-9 sm:py-3 sm:text-base font-extrabold uppercase tracking-wider text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 rounded-full';
+    const classesAtivo = 'tab-btn active-tab py-2.5 px-3 rounded-xl font-display font-bold text-sm sm:text-base uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2';
+    const classesInativo = 'tab-btn py-2.5 px-3 rounded-xl font-display font-bold text-sm sm:text-base uppercase tracking-wider text-slate-400 hover:text-white transition-all duration-300 flex items-center justify-center gap-2';
 
     if (tipoAtual === 'baterias') {
         btnBaterias.className = classesAtivo;
@@ -25,14 +31,48 @@ function mudarAba(novoTipo) {
 }
 
 /**
+ * Converte preço textual (ex: "7,50") em número para ordenação
+ */
+function parsePreco(precoStr) {
+    if (!precoStr) return 0;
+    return parseFloat(String(precoStr).replace(',', '.')) || 0;
+}
+
+/**
+ * Transforma a descrição (ex: "100 Tiros Calibre 20") em etiquetas visuais (pills)
+ */
+function gerarSpecPills(desc) {
+    if (!desc || !desc.trim()) return '';
+
+    const texto = desc.trim();
+    const matchCalibre = texto.match(/^(.*?)\s*(Calibre\s*\d+)$/i);
+
+    if (matchCalibre) {
+        const parteTiros = matchCalibre[1].trim();
+        const parteCalibre = matchCalibre[2].trim();
+        return `
+            <span class="spec-pill spec-pill-gold"><i class="fas fa-crosshairs mr-1 opacity-80"></i>${parteTiros}</span>
+            <span class="spec-pill">${parteCalibre}</span>
+        `;
+    }
+
+    return `<span class="spec-pill spec-pill-gold">${texto}</span>`;
+}
+
+/**
  * Renderiza a grelha de produtos:
- * - Produtos em stock aparecem primeiro
- * - Produtos esgotados ficam sempre no fim da lista
+ * - Produtos em stock aparecem SEMPRE primeiro (com destaque para NOVO 2026 e TOP)
+ * - Produtos esgotados vão SEMPRE para o fim da lista
  */
 function carregarGaleria() {
     const container = document.getElementById('galleryContainer');
     const loading = document.getElementById('loadingState');
     if (loading) loading.style.display = 'none';
+
+    const countBat = document.getElementById('countBaterias');
+    const countBomb = document.getElementById('countBombinhas');
+    if (countBat && typeof listaProdutos !== 'undefined') countBat.textContent = listaProdutos.length;
+    if (countBomb && typeof listaPetardos !== 'undefined') countBomb.textContent = listaPetardos.length;
 
     const produtosBase = tipoAtual === 'baterias' ? listaProdutos : listaPetardos;
     const pastaImagem = tipoAtual === 'baterias' ? 'baterias' : 'petardo';
@@ -42,60 +82,122 @@ function carregarGaleria() {
         return;
     }
 
-    // Ordena garantindo que todos os esgotados vão para o fim da lista
-    const produtos = [...produtosBase].sort((a, b) => {
+    const termo = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+    const criterio = document.getElementById('sortSelect')?.value || 'destaque';
+
+    let produtos = produtosBase.filter(prod => {
+        if (!termo) return true;
+        return (
+            prod.titulo.toLowerCase().includes(termo) ||
+            (prod.desc && prod.desc.toLowerCase().includes(termo)) ||
+            String(prod.preco).includes(termo)
+        );
+    });
+
+    // Ordenação: Esgotados SEMPRE no fim da lista
+    produtos.sort((a, b) => {
         const stockA = a.stock !== false ? 1 : 0;
         const stockB = b.stock !== false ? 1 : 0;
-        return stockB - stockA;
+        if (stockB !== stockA) return stockB - stockA;
+
+        if (criterio === 'menor') {
+            return parsePreco(a.preco) - parsePreco(b.preco);
+        }
+        if (criterio === 'maior') {
+            return parsePreco(b.preco) - parsePreco(a.preco);
+        }
+
+        // Em "Campanha 2026" (destaque): Novos 2026 primeiro, depois Premium
+        const novoA = a.novo === true ? 1 : 0;
+        const novoB = b.novo === true ? 1 : 0;
+        if (novoB !== novoA) return novoB - novoA;
+
+        const premA = a.premium === true ? 1 : 0;
+        const premB = b.premium === true ? 1 : 0;
+        return premB - premA;
     });
 
     produtosRenderizados = produtos.map(p => ({ ...p, pastaImagem }));
 
+    if (produtos.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-full text-center py-14 px-4 bg-dark-900/60 border border-white/5 rounded-2xl">
+                <i class="fas fa-search text-2xl text-gold-400 mb-2"></i>
+                <p class="text-slate-300 font-bold">Nenhum produto encontrado para "${termo}"</p>
+                <button onclick="document.getElementById('searchInput').value='';carregarGaleria();" class="mt-3 text-xs font-bold uppercase tracking-wider text-gold-400 underline">
+                    Ver todos os produtos
+                </button>
+            </div>`;
+        return;
+    }
+
     let html = "";
+    let separadorEsgotadosInserido = false;
 
     produtos.forEach((prod, index) => {
         const temStock = typeof prod.stock !== 'undefined' ? prod.stock : true;
         const classEstoque = !temStock ? "out-of-stock pointer-events-none" : "";
-        const isPremium = prod.premium === true;
-        const isNovo = prod.novo === true;
+        const isPremium = prod.premium === true && temStock;
+        const isNovo = prod.novo === true && temStock;
 
-        let badgeTopo = "";
-        if (isNovo && temStock) {
-            badgeTopo = `
-                <div class="absolute top-0 left-0 bg-gradient-to-r from-orange-600 to-amber-500 text-white text-[10px] sm:text-xs font-black px-3 py-1 sm:px-4 sm:py-1.5 rounded-br-xl shadow-lg uppercase tracking-wider z-20">
-                    Novo
-                </div>`;
-        } else if (isPremium) {
-            badgeTopo = `
-                <div class="absolute top-0 left-0 bg-gradient-to-r from-gold-500 to-yellow-600 text-black text-[10px] sm:text-xs font-black px-3 py-1 sm:px-4 sm:py-1.5 rounded-br-xl shadow-lg uppercase tracking-wider z-20">
-                    <i class="fas fa-crown mr-1"></i> Premium
-                </div>`;
+        // Insere um cabeçalho divisor elegante antes do primeiro produto esgotado
+        if (!temStock && !separadorEsgotadosInserido) {
+            separadorEsgotadosInserido = true;
+            html += `
+                <div class="col-span-full flex items-center gap-3 mt-6 mb-1">
+                    <div class="h-px bg-white/10 flex-grow"></div>
+                    <span class="font-display font-bold text-xs uppercase tracking-[0.2em] text-slate-500 px-3 py-1 rounded-full border border-white/10 bg-dark-900/80">
+                        Produtos Esgotados
+                    </span>
+                    <div class="h-px bg-white/10 flex-grow"></div>
+                </div>
+            `;
         }
 
-        const classPremium = isPremium ? "premium-border" : "";
-        const titleColorClass = isPremium ? 'text-gold-400' : 'text-white group-hover:text-gold-400';
-        const priceColorClass = isPremium ? 'text-gold-400' : 'text-slate-100';
-        const euroColorClass = isPremium ? 'text-gold-400' : 'text-gold-500';
+        const badgeTopo = isNovo ? `
+            <div class="absolute top-2 left-2 badge-novo-2026 text-[10px] sm:text-xs font-display font-bold px-2.5 py-0.5 rounded-md uppercase tracking-wider z-20 flex items-center gap-1">
+                <i class="fas fa-fire text-[9px] text-yellow-200"></i> Novo 2026
+            </div>` : (isPremium ? `
+            <div class="absolute top-2 left-2 bg-gradient-to-r from-gold-400 via-gold-500 to-ember-500 text-black text-[10px] sm:text-xs font-display font-bold px-2.5 py-0.5 rounded-md shadow-lg uppercase tracking-wider z-20 flex items-center gap-1">
+                <i class="fas fa-crown text-[9px]"></i> Top
+            </div>` : "");
+
+        const zoomHint = temStock ? `
+            <div class="absolute bottom-2 right-2 w-6 h-6 rounded-full bg-black/50 border border-white/15 text-slate-300 text-[10px] flex items-center justify-center z-20 opacity-80 group-hover:opacity-100">
+                <i class="fas fa-expand"></i>
+            </div>` : "";
+
+        const cardClass = (isPremium || isNovo) ? "premium-card" : "";
+        const titleColor = (isPremium || isNovo) ? "text-gold-300" : "text-white group-hover:text-gold-300";
+        const priceColor = (isPremium || isNovo) ? "text-black" : "text-gold-400";
+        const euroColor = (isPremium || isNovo) ? "text-black/80" : "text-ember-500";
 
         const loadingAttr = index < 4 ? 'eager' : 'lazy';
         const fallbackPng = prod.imagem.replace('.webp', '.png');
+        const pillsHtml = gerarSpecPills(prod.desc);
 
         html += `
-            <div onclick="${temStock ? `abrirModal(${index})` : ''}" class="product-card rounded-xl sm:rounded-2xl overflow-hidden group product-item ${classPremium} ${classEstoque} relative flex flex-col justify-between ${temStock ? 'cursor-pointer' : ''}">
+            <div onclick="${temStock ? `abrirModal(${index})` : ''}" class="product-card ${cardClass} ${classEstoque} rounded-2xl overflow-hidden group relative flex flex-col justify-between ${temStock ? 'cursor-pointer' : ''}">
                 <div class="image-wrapper relative">
                     ${badgeTopo}
+                    ${zoomHint}
                     <img src="${pastaImagem}/${prod.imagem}" 
                          loading="${loadingAttr}" 
                          decoding="async"
                          onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='${pastaImagem}/${fallbackPng}';}else{this.src='https://placehold.co/600x400/1e293b/FFF?text=GaloFire';}" 
                          alt="${prod.titulo}" class="product-image">
                 </div>
-                <div class="p-3 sm:p-5 text-center flex flex-col flex-grow justify-between">
+
+                <div class="p-3 sm:p-4 flex flex-col flex-grow justify-between gap-2.5">
                     <div>
-                        <h3 class="text-base sm:text-2xl font-bold ${titleColorClass} mb-1 leading-tight transition-colors">${prod.titulo}</h3>
-                        <p class="text-xs sm:text-lg font-semibold text-gold-400/90 mb-2 min-h-[1rem]">${prod.desc}</p>
+                        <h3 class="font-display font-bold text-base sm:text-xl uppercase tracking-wide ${titleColor} leading-tight line-clamp-2">${prod.titulo}</h3>
+                        ${pillsHtml ? `<div class="flex flex-wrap gap-1 mt-1.5">${pillsHtml}</div>` : `<div class="h-4"></div>`}
                     </div>
-                    <span class="text-2xl sm:text-3xl font-black ${priceColorClass}">${prod.preco}<span class="text-sm sm:text-xl align-top ${euroColorClass}">€</span></span>
+
+                    <div class="price-box rounded-xl py-1.5 px-3 flex items-center justify-between">
+                        <span class="text-[10px] sm:text-xs uppercase tracking-wider font-bold ${(isPremium || isNovo) ? 'text-black/75' : 'text-slate-400'}">${temStock ? 'Preço' : 'Indisponível'}</span>
+                        <span class="font-display font-bold text-xl sm:text-2xl leading-none ${priceColor}">${prod.preco}<span class="text-xs sm:text-sm align-top ml-0.5 ${euroColor}">€</span></span>
+                    </div>
                 </div>
             </div>
         `;
@@ -115,7 +217,7 @@ function abrirModal(index) {
     const card = document.getElementById('modalCard');
     const img = document.getElementById('modalImg');
     const title = document.getElementById('modalTitle');
-    const desc = document.getElementById('modalDesc');
+    const badges = document.getElementById('modalBadges');
     const price = document.getElementById('modalPrice');
 
     const fallbackPng = prod.imagem.replace('.webp', '.png');
@@ -130,8 +232,8 @@ function abrirModal(index) {
     img.alt = prod.titulo;
 
     title.textContent = prod.titulo;
-    desc.textContent = prod.desc || '';
     price.textContent = prod.preco;
+    badges.innerHTML = gerarSpecPills(prod.desc);
 
     modal.classList.remove('hidden');
     modal.classList.add('flex');
@@ -153,11 +255,11 @@ function fecharModal() {
     setTimeout(() => {
         modal.classList.remove('flex');
         modal.classList.add('hidden');
-    }, 200);
+    }, 250);
 }
 
 /**
- * Brasas subtis em Canvas
+ * Sistema leve de Brasas / Faíscas flutuantes em Canvas (60fps em Mobile)
  */
 function iniciarBrasasFundo() {
     const canvas = document.getElementById('ember-canvas');
@@ -173,16 +275,16 @@ function iniciarBrasasFundo() {
     }, { passive: true });
 
     const isMobile = w < 768;
-    const total = isMobile ? 18 : 35;
-    const cores = ['#FACC15', '#F97316', '#EF4444'];
+    const total = isMobile ? 26 : 50;
+    const cores = ['#FACC15', '#F97316', '#EF4444', '#FEF08A'];
 
     const brasas = Array.from({ length: total }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        r: 1 + Math.random() * 2,
-        vy: 0.3 + Math.random() * 0.7,
-        vx: (Math.random() - 0.5) * 0.35,
-        alpha: 0.2 + Math.random() * 0.5,
+        r: 1 + Math.random() * 2.4,
+        vy: 0.4 + Math.random() * 0.9,
+        vx: (Math.random() - 0.5) * 0.45,
+        alpha: 0.25 + Math.random() * 0.65,
         cor: cores[Math.floor(Math.random() * cores.length)]
     }));
 
@@ -210,18 +312,28 @@ function iniciarBrasasFundo() {
     animar();
 }
 
+// Inicialização imediata
 document.addEventListener('DOMContentLoaded', () => {
     carregarGaleria();
     iniciarBrasasFundo();
     iniciarIntro();
 });
 
+/**
+ * SEQUENCIA DE INTRODUÇÃO BOMBASTICA — NOVA CAMPANHA 2026
+ */
 function iniciarIntro() {
     const overlay = document.getElementById('intro-overlay');
     const container = document.getElementById('fireworks-container');
     const message = document.getElementById('intro-message');
 
     if (!overlay) return;
+
+    if (sessionStorage.getItem('galofire_2026_intro') === '1') {
+        overlay.remove();
+        return;
+    }
+    sessionStorage.setItem('galofire_2026_intro', '1');
 
     const isMobile = window.innerWidth < 768;
     const foguetesPorCiclo = isMobile ? 3 : 5;
@@ -249,9 +361,9 @@ function iniciarIntro() {
             message.classList.remove('opacity-0', 'scale-90');
             message.classList.add('opacity-100', 'scale-100');
         }
-    }, 300);
+    }, 250);
 
-    setTimeout(fecharIntro, 3500);
+    setTimeout(fecharIntro, 3600);
 }
 
 function lancarFoguete(container, isMobile) {
