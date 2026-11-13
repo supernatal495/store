@@ -2,62 +2,47 @@
 <html lang="pt" class="scroll-smooth">
 
 <head>
-    <!-- 
-        Ficha Técnica e Metadados 
-        Configurações essenciais para SEO, responsividade e cache.
-    -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 
-    <!-- Controlo de Cache (Para garantir que atualizações são vistas imediatamente) -->
+    <!-- Controlo de Cache -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <title>GaloFire - Pirotecnia de Barcelos</title>
-    <meta name="description" content="Catálogo GaloFire 2025.">
-    <meta name="theme-color" content="#0f172a">
+    <title>GaloFire — Pirotecnia de Barcelos</title>
+    <meta name="description" content="Catálogo GaloFire — Barcelos tem o Galo, nós tratamos do estalo!">
+    <meta name="theme-color" content="#050508">
 
-    <!-- Open Graph (Para partilhas bonitas no Facebook/WhatsApp) -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="GaloFire - Barcelos tem o Galo, nós tratamos do estalo!">
-    <meta property="og:description" content="Veja o nosso catálogo 2025.">
+    <meta property="og:description" content="Veja o nosso catálogo oficial de Baterias e Petardos.">
     <meta property="og:image" content="https://galofire.pages.dev/ico.jpg">
     <link rel="icon" type="image/jpeg" href="ico.jpg">
 
-    <!-- 
-        Bibliotecas Externas (CDNs)
-        - Tailwind CSS: Framework de estilos utilitários
-        - FontAwesome: Ícones
-        - Google Fonts: Tipo de letra 'Outfit'
-    -->
+    <!-- Fontes & Ícones -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=Outfit:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-    <!-- Nossos Estilos Personalizados -->
+    <!-- Estilos Personalizados -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Configuração do Tailwind -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Chakra Petch', 'sans-serif']
+                    },
                     colors: {
-                        gold: { 400: '#FACC15', 500: '#EAB308', 600: '#CA8A04' },
-                        dark: { 900: '#020617', 800: '#0f172a' }
-                    },
-                    animation: {
-                        'float': 'float 3s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
+                        gold: { 300: '#FDE047', 400: '#FACC15', 500: '#EAB308', 600: '#CA8A04' },
+                        ember: { 500: '#F97316', 600: '#EA580C', 700: '#C2410C' },
+                        dark: { 950: '#040508', 900: '#090D16', 800: '#111827' }
                     }
                 }
             }
@@ -65,106 +50,156 @@
     </script>
 </head>
 
-<body class="text-slate-200 antialiased min-h-screen flex flex-col">
+<body class="text-slate-100 antialiased min-h-screen flex flex-col selection:bg-gold-500 selection:text-black">
 
-    <!-- 
-        Menu de Navegação Fixo 
-        Contém o logótipo e ícones sociais.
-    -->
-    <nav
-        class="fixed top-0 w-full z-50 bg-dark-900/95 backdrop-blur-md border-b border-gold-400/20 shadow-2xl transition-all duration-300">
-        <div class="container mx-auto px-4 py-2.5 sm:py-3 flex justify-between items-center">
+    <!-- Canvas de Faíscas / Brasas Flutuantes em Tempo Real -->
+    <canvas id="ember-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
 
-            <!-- Logótipo (clicável para ir ao topo) -->
-            <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+    <!-- Barra de Navegação Ultra-Sleek -->
+    <nav class="fixed top-0 w-full z-50 nav-glass border-b border-gold-400/20">
+        <div class="container mx-auto px-4 py-2.5 flex justify-between items-center">
+            <!-- Brand / Logo -->
+            <div class="flex items-center gap-2.5 cursor-pointer group" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="w-9 h-9 rounded-lg overflow-hidden border border-gold-400/50 shadow-[0_0_15px_rgba(234,179,8,0.35)] flex-shrink-0 bg-black">
+                    <img src="ico.jpg" alt="GaloFire" class="w-full h-full object-cover">
+                </div>
                 <div class="flex flex-col">
-                    <span class="font-black text-xl sm:text-2xl md:text-3xl text-white tracking-wide uppercase leading-none">
-                        Galo<span class="text-gold-400">Fire</span>
+                    <span class="font-display font-bold text-xl sm:text-2xl text-white tracking-wider uppercase leading-none">
+                        GALO<span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-ember-500">FIRE</span>
                     </span>
-                    <span class="text-[10px] sm:text-xs text-gold-400 tracking-widest uppercase font-semibold">Barcelos</span>
+                    <span class="text-[9px] sm:text-[10px] text-gold-400/90 tracking-[0.25em] uppercase font-bold">Barcelos</span>
                 </div>
             </div>
 
-            <div class="flex space-x-3">
-                <!-- Ícones Sociais removidos a pedido -->
+            <!-- Badge Arsenal Ativo -->
+            <div class="flex items-center gap-2 bg-white/5 border border-gold-400/25 px-3 py-1 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span class="w-2 h-2 rounded-full bg-emerald-400 -ml-4"></span>
+                <span class="text-[11px] sm:text-xs font-bold tracking-wider uppercase text-slate-200">Stock Disponível</span>
             </div>
-
         </div>
     </nav>
 
-    <!-- 
-        Cabeçalho Principal (Hero Section)
-        Apresenta o título principal e o slogan animado (Compactado em mobile para mostrar logo os produtos).
-    -->
-    <header class="pt-20 pb-3 sm:pt-32 sm:pb-8 px-4 text-center animate-fade-in-down">
-        <h1 class="logo-glow text-4xl sm:text-6xl md:text-8xl font-black text-white mb-2 sm:mb-6 uppercase tracking-tight relative z-10">
-            Galo<span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-orange-500">Fire</span>
+    <!-- HERO SECTION EXPLOSIVO -->
+    <header class="relative z-10 pt-20 pb-4 sm:pt-28 sm:pb-8 px-4 text-center overflow-hidden">
+        <!-- Luzes de Palco Traseiras -->
+        <div class="hero-spotlight"></div>
+
+        <!-- Pill de Destaque -->
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gradient-to-r from-ember-600/20 via-gold-500/20 to-ember-600/20 border border-gold-400/30 text-gold-300 text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] mb-3 shadow-lg">
+            <i class="fas fa-bolt text-ember-500"></i> Pirotecnia de Alto Impacto
+        </div>
+
+        <!-- Título Monumental -->
+        <h1 class="font-display font-bold text-5xl sm:text-7xl md:text-8xl uppercase tracking-wider leading-none mb-3 relative">
+            <span class="text-white drop-shadow-[0_4px_20px_rgba(255,255,255,0.2)]">GALO</span><span class="hero-fire-text">FIRE</span>
         </h1>
 
-        <p class="subtitle-shadow text-gold-400 text-base sm:text-2xl md:text-4xl mb-2 sm:mb-8 italic font-bold px-2">
-            <i class="fas fa-fire text-gold-500 mr-1.5 sm:mr-2 animate-pulse"></i>
-            "Barcelos tem o Galo, nós tratamos do estalo!"
+        <!-- Slogan -->
+        <p class="text-slate-200 text-sm sm:text-xl md:text-2xl font-medium max-w-xl mx-auto px-3 py-1.5 rounded-xl bg-black/40 border border-white/5 backdrop-blur-sm">
+            <i class="fas fa-fire-flame-curved text-ember-500 mr-1.5 animate-pulse"></i>
+            <span class="italic font-semibold text-gold-300">"Barcelos tem o Galo, nós tratamos do estalo!"</span>
         </p>
     </header>
 
-    <!-- 
-        Conteúdo Principal 
-        Contém as abas de navegação e a grelha de produtos.
-    -->
-    <main class="container mx-auto px-3 sm:px-4 pb-16 sm:pb-20 flex-grow">
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="relative z-10 container mx-auto px-3 sm:px-4 pb-20 flex-grow">
 
-        <!-- NOVA NAVEGAÇÃO POR ABAS (Mobile First Sticky) -->
-        <div class="flex justify-center mb-6 sm:mb-10 sticky top-16 sm:top-24 z-40">
-            <div class="glass-tabs p-1 rounded-full inline-flex relative shadow-2xl">
-                <button onclick="mudarAba('baterias')" id="tabBaterias"
-                    class="tab-btn active-tab px-5 py-2 text-xs sm:px-8 sm:py-3 sm:text-lg font-bold transition-all duration-300 flex items-center gap-2 rounded-full">
-                    <i class="fas fa-battery-three-quarters"></i> Baterias
-                </button>
-                <button onclick="mudarAba('bombinhas')" id="tabBombinhas"
-                    class="tab-btn px-5 py-2 text-xs sm:px-8 sm:py-3 sm:text-lg font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 rounded-full">
-                    <i class="fas fa-bomb"></i> Bombinhas
-                </button>
+        <!-- BARRA DE COMANDO STICKY (Abas + Filtros Rápidos) -->
+        <div class="sticky top-[53px] sm:top-[57px] z-40 py-2.5 -mx-3 px-3 sm:mx-0 sm:px-0 bg-gradient-to-b from-dark-950 via-dark-950/95 to-transparent backdrop-blur-md">
+            <div class="max-w-lg mx-auto flex flex-col gap-2.5">
+                <!-- Seletor de Categorias Principal -->
+                <div class="cyber-tabs p-1.5 rounded-2xl grid grid-cols-2 gap-1.5 relative">
+                    <button onclick="mudarAba('baterias')" id="tabBaterias"
+                        class="tab-btn active-tab py-2.5 px-3 rounded-xl font-display font-bold text-sm sm:text-base uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2">
+                        <i class="fas fa-Explosion fas fa-fire"></i>
+                        <span>Baterias</span>
+                        <span id="countBaterias" class="tab-badge">14</span>
+                    </button>
+                    <button onclick="mudarAba('bombinhas')" id="tabBombinhas"
+                        class="tab-btn py-2.5 px-3 rounded-xl font-display font-bold text-sm sm:text-base uppercase tracking-wider text-slate-400 hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
+                        <i class="fas fa-bomb"></i>
+                        <span>Bombinhas</span>
+                        <span id="countBombinhas" class="tab-badge">16</span>
+                    </button>
+                </div>
+
+                <!-- Barra de Pesquisa & Ordenação Rápida -->
+                <div class="flex items-center gap-2">
+                    <div class="relative flex-grow">
+                        <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input id="searchInput" type="search" oninput="carregarGaleria()" placeholder="Procurar produto ou tiros (ex: 100, Panda...)"
+                            class="w-full bg-dark-900/90 border border-white/10 focus:border-gold-400/60 rounded-xl pl-9 pr-3 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition-colors">
+                    </div>
+                    <select id="sortSelect" onchange="carregarGaleria()" aria-label="Ordenar por"
+                        class="bg-dark-900/90 border border-white/10 focus:border-gold-400/60 rounded-xl px-3 py-2 text-xs sm:text-sm text-gold-400 font-bold outline-none cursor-pointer">
+                        <option value="destaque">🔥 Destaques</option>
+                        <option value="menor">💶 Preço: Menor</option>
+                        <option value="maior">💎 Preço: Maior</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <!-- Container onde os produtos são injetados pelo JavaScript (2 colunas em mobile) -->
-        <div id="galleryContainer" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+        <!-- GRELHA DE PRODUTOS (2 Colunas em Mobile, 3 em Laptop, 4 em Desktop) -->
+        <div id="galleryContainer" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 mt-3">
         </div>
 
-        <!-- Indicador de Loading inicial -->
+        <!-- Loading Inicial -->
         <div id="loadingState" class="text-center py-20">
             <i class="fas fa-circle-notch fa-spin text-3xl text-gold-500"></i>
-            <p class="text-slate-500 mt-2">A carregar produtos...</p>
+            <p class="text-slate-400 mt-2 text-sm">A preparar o arsenal...</p>
         </div>
     </main>
 
-    <footer class="border-t border-slate-800 py-8 sm:py-10 text-center bg-dark-900">
-        <p class="text-slate-500 text-sm">© 2025 GaloFire.</p>
+    <!-- MODAL DE VISUALIZAÇÃO AMPLIADA (Ao tocar num produto no telemóvel) -->
+    <div id="productModal" class="fixed inset-0 z-[90] bg-black/90 backdrop-blur-md hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="fecharModal()">
+        <div class="relative max-w-md w-full bg-dark-900 border border-gold-400/40 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(234,179,8,0.25)] transform scale-95 transition-transform duration-300" id="modalCard" onclick="event.stopPropagation()">
+            <button onclick="fecharModal()" aria-label="Fechar" class="absolute top-3 right-3 z-30 w-9 h-9 rounded-full bg-black/70 border border-white/20 text-white flex items-center justify-center hover:bg-ember-600 transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="aspect-square bg-gradient-to-b from-dark-800 to-dark-950 p-6 flex items-center justify-center relative">
+                <div class="modal-spotlight"></div>
+                <img id="modalImg" src="" alt="" class="max-w-full max-h-full object-contain relative z-10 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]">
+            </div>
+            <div class="p-5 text-center border-t border-white/10 bg-dark-950">
+                <div id="modalBadges" class="flex flex-wrap justify-center gap-1.5 mb-2"></div>
+                <h3 id="modalTitle" class="font-display font-bold text-2xl text-white uppercase tracking-wide mb-1"></h3>
+                <div class="mt-3 inline-flex items-baseline gap-1 bg-gradient-to-r from-gold-500/20 to-ember-500/20 border border-gold-400/40 px-6 py-2 rounded-2xl">
+                    <span id="modalPrice" class="font-display font-bold text-3xl text-gold-400"></span>
+                    <span class="font-display font-bold text-xl text-ember-500">€</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer class="relative z-10 border-t border-white/10 py-8 text-center bg-dark-950/90">
+        <p class="font-display font-bold text-sm tracking-widest uppercase text-gold-400 mb-1">GALOFIRE • BARCELOS</p>
+        <p class="text-slate-500 text-xs">© 2025 GaloFire. Todos os direitos reservados.</p>
     </footer>
 
-    <!-- INTRO OVERLAY BOMBASTICO (Clicável para saltar em mobile) -->
+    <!-- INTRO OVERLAY BOMBASTICO -->
     <div id="intro-overlay"
-        class="fixed inset-0 z-[100] bg-black/85 flex flex-col items-center justify-center transition-opacity duration-700 cursor-pointer select-none">
+        class="fixed inset-0 z-[100] bg-black/90 flex flex-col items-center justify-center transition-opacity duration-700 cursor-pointer select-none">
         <div id="intro-message"
             class="text-center z-10 p-5 opacity-0 transition-all duration-500 scale-90 transform">
-            <h1
-                class="text-4xl sm:text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-orange-500 mb-4 animate-bounce">
+            <div class="inline-block px-3 py-1 rounded-full border border-gold-400/40 bg-gold-500/10 text-gold-300 text-xs font-bold uppercase tracking-widest mb-3">
+                Pirotecnia de Barcelos
+            </div>
+            <h1 class="font-display text-4xl sm:text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-ember-500 mb-3 animate-bounce uppercase">
                 Bem-vindo ao GaloFire!
             </h1>
-            <p class="text-xl sm:text-2xl md:text-4xl text-white font-bold animate-pulse">
+            <p class="text-lg sm:text-2xl md:text-4xl text-white font-bold animate-pulse">
                 Faz a festa connosco! 🎆
             </p>
             <p class="text-xs text-slate-400 mt-6 uppercase tracking-widest opacity-80">
                 Toca no ecrã para entrar
             </p>
         </div>
-        <!-- Container para os foguetes -->
         <div id="fireworks-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
     </div>
 
-    <!-- 
-        Scripts do Site (Carregamento com defer para não bloquear a renderização em mobile)
-    -->
     <script src="dados.js" defer></script>
     <script src="app.js" defer></script>
 </body>

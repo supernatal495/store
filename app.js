@@ -1,24 +1,27 @@
 // Estado global para controlar a aba ativa (baterias vs bombinhas)
 let tipoAtual = 'baterias';
+let produtosRenderizados = [];
 
 /**
- * Funcao para mudar a aba ativa
- * @param {string} novoTipo - 'baterias' ou 'bombinhas'
+ * Muda a aba ativa entre 'baterias' e 'bombinhas'
  */
 function mudarAba(novoTipo) {
     tipoAtual = novoTipo;
-    carregarGaleria(); // Recarrega os dados
 
-    // Obter referências aos botões
+    // Limpa pesquisa ao trocar de aba para mostrar todos os itens da categoria
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput && searchInput.value) {
+        searchInput.value = '';
+    }
+
+    carregarGaleria();
+
     const btnBaterias = document.getElementById('tabBaterias');
     const btnBombinhas = document.getElementById('tabBombinhas');
 
-    // Classes CSS (Tailwind) para estados Ativo e Inativo
-    // Nota: 'active-tab' contem estilos extra no style.css
-    const classesAtivo = 'tab-btn active-tab px-5 py-2 text-xs sm:px-8 sm:py-3 sm:text-lg font-bold transition-all duration-300 flex items-center gap-2 rounded-full';
-    const classesInativo = 'tab-btn px-5 py-2 text-xs sm:px-8 sm:py-3 sm:text-lg font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 rounded-full';
+    const classesAtivo = 'tab-btn active-tab py-2.5 px-3 rounded-xl font-display font-bold text-sm sm:text-base uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2';
+    const classesInativo = 'tab-btn py-2.5 px-3 rounded-xl font-display font-bold text-sm sm:text-base uppercase tracking-wider text-slate-400 hover:text-white transition-all duration-300 flex items-center justify-center gap-2';
 
-    // Aplica as classes consoante a seleção
     if (tipoAtual === 'baterias') {
         btnBaterias.className = classesAtivo;
         btnBombinhas.className = classesInativo;
@@ -29,128 +32,272 @@ function mudarAba(novoTipo) {
 }
 
 /**
- * Função Principal de Renderização
- * Le os dados (listaProdutos ou listaPetardos), ordena stock disponível primeiro e gera o HTML.
+ * Converte preço textual (ex: "7,50") em número para ordenação
+ */
+function parsePreco(precoStr) {
+    if (!precoStr) return 0;
+    return parseFloat(String(precoStr).replace(',', '.')) || 0;
+}
+
+/**
+ * Transforma a descrição (ex: "100 Tiros Calibre 20") em etiquetas visuais (pills)
+ */
+function gerarSpecPills(desc) {
+    if (!desc || !desc.trim()) return '';
+
+    const texto = desc.trim();
+    const matchCalibre = texto.match(/^(.*?)\s*(Calibre\s*\d+)$/i);
+
+    if (matchCalibre) {
+        const parteTiros = matchCalibre[1].trim();
+        const parteCalibre = matchCalibre[2].trim();
+        return `
+            <span class="spec-pill spec-pill-gold"><i class="fas fa-crosshairs mr-1 opacity-80"></i>${parteTiros}</span>
+            <span class="spec-pill">${parteCalibre}</span>
+        `;
+    }
+
+    return `<span class="spec-pill spec-pill-gold">${texto}</span>`;
+}
+
+/**
+ * Renderiza a grelha de produtos com pesquisa, ordenação e visual de alto impacto
  */
 function carregarGaleria() {
     const container = document.getElementById('galleryContainer');
     const loading = document.getElementById('loadingState');
-
-    // Esconde a animação de loading
     if (loading) loading.style.display = 'none';
 
-    // Seleciona a lista de dados e a pasta de imagens correta
+    // Atualiza contadores nas abas
+    const countBat = document.getElementById('countBaterias');
+    const countBomb = document.getElementById('countBombinhas');
+    if (countBat && typeof listaProdutos !== 'undefined') countBat.textContent = listaProdutos.length;
+    if (countBomb && typeof listaPetardos !== 'undefined') countBomb.textContent = listaPetardos.length;
+
     const produtosBase = tipoAtual === 'baterias' ? listaProdutos : listaPetardos;
     const pastaImagem = tipoAtual === 'baterias' ? 'baterias' : 'petardo';
 
-    // Validação de segurança se a lista estiver vazia
     if (typeof produtosBase === 'undefined' || produtosBase.length === 0) {
         container.innerHTML = '<div class="col-span-full text-center text-slate-500 mt-10">Sem produtos.</div>';
         return;
     }
 
-    // Ordena automaticamente: produtos em stock primeiro, esgotados no fim
-    const produtos = [...produtosBase].sort((a, b) => {
+    // Filtro de pesquisa
+    const termo = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+    const criterio = document.getElementById('sortSelect')?.value || 'destaque';
+
+    let produtos = produtosBase.filter(prod => {
+        if (!termo) return true;
+        return (
+            prod.titulo.toLowerCase().includes(termo) ||
+            (prod.desc && prod.desc.toLowerCase().includes(termo)) ||
+            String(prod.preco).includes(termo)
+        );
+    });
+
+    // Ordenação
+    produtos.sort((a, b) => {
         const stockA = a.stock !== false ? 1 : 0;
         const stockB = b.stock !== false ? 1 : 0;
-        return stockB - stockA;
+        if (stockB !== stockA) return stockB - stockA;
+
+        if (criterio === 'menor') {
+            return parsePreco(a.preco) - parsePreco(b.preco);
+        }
+        if (criterio === 'maior') {
+            return parsePreco(b.preco) - parsePreco(a.preco);
+        }
+        // Por defeito ('destaque'): Premium primeiro
+        const premA = a.premium === true ? 1 : 0;
+        const premB = b.premium === true ? 1 : 0;
+        return premB - premA;
     });
+
+    produtosRenderizados = produtos.map(p => ({ ...p, pastaImagem }));
+
+    if (produtos.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-full text-center py-14 px-4 bg-dark-900/60 border border-white/5 rounded-2xl">
+                <i class="fas fa-search text-2xl text-gold-400 mb-2"></i>
+                <p class="text-slate-300 font-bold">Nenhum produto encontrado para "${termo}"</p>
+                <button onclick="document.getElementById('searchInput').value='';carregarGaleria();" class="mt-3 text-xs font-bold uppercase tracking-wider text-gold-400 underline">
+                    Ver todos os produtos
+                </button>
+            </div>`;
+        return;
+    }
 
     let html = "";
 
-    // Loop através de cada produto para criar o cartão
     produtos.forEach((prod, index) => {
-        let badgePremium = "";
-        let badgePoucasUnidades = "";
-        let classPremium = "";
-        let classEstoque = "";
-        let badgeEsgotado = "";
-
-        // Classes padrão para Título, Preço e Símbolo Euro
-        let titleColorClass = 'text-white group-hover:text-gold-400';
-        let priceColorClass = 'text-slate-200';
-        let euroColorClass = 'text-gold-500';
-
-        // --- SISTEMA DE STOCK ---
-        // Verifica se existe a propriedade stock (default true)
         const temStock = typeof prod.stock !== 'undefined' ? prod.stock : true;
+        const classEstoque = !temStock ? "out-of-stock pointer-events-none" : "";
+        const isPremium = prod.premium === true;
 
-        if (!temStock) {
-            // Se não tiver stock:
-            // 1. Aplica classe CSS que mete a cinzento e bloqueia cliques
-            classEstoque = "out-of-stock pointer-events-none";
-            // 2. Cria div vazia para ajudar no posicionamento do carimbo
-            badgeEsgotado = `<div class="absolute inset-0 z-10"></div>`;
-        }
+        const badgePremium = isPremium ? `
+            <div class="absolute top-2 left-2 bg-gradient-to-r from-gold-400 via-gold-500 to-ember-500 text-black text-[10px] sm:text-xs font-display font-bold px-2.5 py-0.5 rounded-md shadow-lg uppercase tracking-wider z-20 flex items-center gap-1">
+                <i class="fas fa-crown text-[9px]"></i> Top
+            </div>` : "";
 
-        // --- SISTEMA POUCAS UNIDADES ---
-        const isPoucasUnidades = typeof prod.poucasUnidades !== 'undefined' ? prod.poucasUnidades : false;
-        if (isPoucasUnidades && temStock) {
-            badgePoucasUnidades = `
-                <div class="absolute top-0 right-0 bg-gradient-to-r from-red-600 to-orange-600 text-white text-[10px] sm:text-xs font-black px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-bl-xl shadow-lg uppercase tracking-wider z-20 animate-pulse-alert">
-                    <i class="fas fa-fire-alt mr-1"></i> Poucas Unid.
-                </div>`;
-        }
+        const zoomHint = `
+            <div class="absolute bottom-2 right-2 w-6 h-6 rounded-full bg-black/50 border border-white/15 text-slate-300 text-[10px] flex items-center justify-center z-20 opacity-80 group-hover:opacity-100">
+                <i class="fas fa-expand"></i>
+            </div>`;
 
-        // --- SISTEMA PREMIUM ---
-        if (prod.premium === true) {
-            // Se for Premium: adiciona borda dourada e badge "Coroa"
-            badgePremium = `
-                <div class="absolute top-0 left-0 bg-gradient-to-r from-gold-500 to-yellow-700 text-black text-[10px] sm:text-xs font-black px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-br-xl shadow-lg uppercase tracking-wider z-20">
-                    <i class="fas fa-crown mr-1"></i> Premium
-                </div>`;
-            classPremium = "premium-border";
+        const cardClass = isPremium ? "premium-card" : "";
+        const titleColor = isPremium ? "text-gold-300" : "text-white group-hover:text-gold-300";
+        const priceColor = isPremium ? "text-black" : "text-gold-400";
+        const euroColor = isPremium ? "text-black/80" : "text-ember-500";
 
-            // Muda as cores do texto para Dourado
-            titleColorClass = 'text-gold-400';
-            priceColorClass = 'text-gold-400';
-            euroColorClass = 'text-gold-400';
-        }
-
-        // Os primeiros 4 produtos carregam imediatamente (acima da dobra no telemóvel), restantes com lazy loading
         const loadingAttr = index < 4 ? 'eager' : 'lazy';
         const fallbackPng = prod.imagem.replace('.webp', '.png');
+        const pillsHtml = gerarSpecPills(prod.desc);
 
-        // Constrói o HTML do Cartão (Otimizado para 2 colunas em mobile)
         html += `
-            <div class="product-card rounded-xl sm:rounded-2xl overflow-hidden group product-item ${classPremium} ${classEstoque} relative flex flex-col justify-between">
+            <div onclick="abrirModal(${index})" class="product-card ${cardClass} ${classEstoque} rounded-2xl overflow-hidden group relative flex flex-col justify-between cursor-pointer">
                 <div class="image-wrapper relative">
                     ${badgePremium}
-                    ${badgePoucasUnidades}
-                    ${badgeEsgotado}
-                    
-                    <!-- Imagem WebP com Fallback automático para PNG e Placeholder -->
+                    ${zoomHint}
                     <img src="${pastaImagem}/${prod.imagem}" 
-                            loading="${loadingAttr}" 
-                            decoding="async"
-                            onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='${pastaImagem}/${fallbackPng}';}else{this.src='https://placehold.co/600x400/1e293b/FFF?text=GaloFire';}" 
-                            alt="${prod.titulo}" class="product-image">
+                         loading="${loadingAttr}" 
+                         decoding="async"
+                         onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='${pastaImagem}/${fallbackPng}';}else{this.src='https://placehold.co/600x400/1e293b/FFF?text=GaloFire';}" 
+                         alt="${prod.titulo}" class="product-image">
                 </div>
-                <div class="p-3 sm:p-5 text-center flex flex-col flex-grow justify-between">
+
+                <div class="p-3 sm:p-4 flex flex-col flex-grow justify-between gap-2.5">
                     <div>
-                        <h3 class="text-base sm:text-2xl font-bold ${titleColorClass} mb-1 sm:mb-2 leading-tight transition-colors">${prod.titulo}</h3>
-                        <p class="text-xs sm:text-xl font-semibold text-gold-400 mb-2 min-h-[1rem]">${prod.desc}</p>
+                        <h3 class="font-display font-bold text-base sm:text-xl uppercase tracking-wide ${titleColor} leading-tight line-clamp-2">${prod.titulo}</h3>
+                        ${pillsHtml ? `<div class="flex flex-wrap gap-1 mt-1.5">${pillsHtml}</div>` : `<div class="h-4"></div>`}
                     </div>
-                    <span class="text-2xl sm:text-3xl font-black ${priceColorClass}">${prod.preco}<span class="text-sm sm:text-xl align-top ${euroColorClass}">€</span></span>
+
+                    <div class="price-box rounded-xl py-1.5 px-3 flex items-center justify-between">
+                        <span class="text-[10px] sm:text-xs uppercase tracking-wider font-bold ${isPremium ? 'text-black/75' : 'text-slate-400'}">Preço</span>
+                        <span class="font-display font-bold text-xl sm:text-2xl leading-none ${priceColor}">${prod.preco}<span class="text-xs sm:text-sm align-top ml-0.5 ${euroColor}">€</span></span>
+                    </div>
                 </div>
             </div>
         `;
     });
 
-    // Injeta o HTML no DOM
     container.innerHTML = html;
 }
 
-// Inicia a galeria assim que o DOM está pronto (muito mais rápido em redes móveis do que window.onload)
+/**
+ * Abre o modal de visualização ampliada ao tocar num produto
+ */
+function abrirModal(index) {
+    const prod = produtosRenderizados[index];
+    if (!prod) return;
+
+    const modal = document.getElementById('productModal');
+    const card = document.getElementById('modalCard');
+    const img = document.getElementById('modalImg');
+    const title = document.getElementById('modalTitle');
+    const badges = document.getElementById('modalBadges');
+    const price = document.getElementById('modalPrice');
+
+    const fallbackPng = prod.imagem.replace('.webp', '.png');
+    img.dataset.fallback = '';
+    img.onerror = function () {
+        if (!this.dataset.fallback) {
+            this.dataset.fallback = '1';
+            this.src = `${prod.pastaImagem}/${fallbackPng}`;
+        }
+    };
+    img.src = `${prod.pastaImagem}/${prod.imagem}`;
+    img.alt = prod.titulo;
+
+    title.textContent = prod.titulo;
+    price.textContent = prod.preco;
+    badges.innerHTML = gerarSpecPills(prod.desc);
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    requestAnimationFrame(() => {
+        modal.classList.remove('opacity-0');
+        card.classList.remove('scale-95');
+        card.classList.add('scale-100');
+    });
+}
+
+function fecharModal() {
+    const modal = document.getElementById('productModal');
+    const card = document.getElementById('modalCard');
+    if (!modal) return;
+
+    modal.classList.add('opacity-0');
+    card.classList.remove('scale-100');
+    card.classList.add('scale-95');
+    setTimeout(() => {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+    }, 250);
+}
+
+/**
+ * Sistema leve de Brasas / Faíscas flutuantes em Canvas (60fps em Mobile)
+ */
+function iniciarBrasasFundo() {
+    const canvas = document.getElementById('ember-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let w = (canvas.width = window.innerWidth);
+    let h = (canvas.height = window.innerHeight);
+
+    window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+    }, { passive: true });
+
+    const isMobile = w < 768;
+    const total = isMobile ? 22 : 45;
+    const cores = ['#FACC15', '#F97316', '#EF4444', '#FEF08A'];
+
+    const brasas = Array.from({ length: total }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: 1 + Math.random() * 2.2,
+        vy: 0.35 + Math.random() * 0.85,
+        vx: (Math.random() - 0.5) * 0.4,
+        alpha: 0.2 + Math.random() * 0.6,
+        cor: cores[Math.floor(Math.random() * cores.length)]
+    }));
+
+    function animar() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < brasas.length; i++) {
+            const b = brasas[i];
+            b.y -= b.vy;
+            b.x += b.vx;
+
+            if (b.y < -10) {
+                b.y = h + 10;
+                b.x = Math.random() * w;
+            }
+
+            ctx.globalAlpha = b.alpha;
+            ctx.fillStyle = b.cor;
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        requestAnimationFrame(animar);
+    }
+
+    animar();
+}
+
+// Inicialização imediata
 document.addEventListener('DOMContentLoaded', () => {
     carregarGaleria();
+    iniciarBrasasFundo();
     iniciarIntro();
 });
 
 /**
- * SEQUENCIA DE INTRODUÇÃO BOMBASTICA (Otimizada para Mobile)
- * - Permite fechar ao tocar no ecrã
- * - Guarda em sessionStorage para não repetir se o utilizador atualizar a página
+ * SEQUENCIA DE INTRODUÇÃO BOMBASTICA
  */
 function iniciarIntro() {
     const overlay = document.getElementById('intro-overlay');
@@ -159,7 +306,6 @@ function iniciarIntro() {
 
     if (!overlay) return;
 
-    // Se já viu a intro nesta sessão, remove imediatamente sem bloquear
     if (sessionStorage.getItem('galofire_intro_seen') === '1') {
         overlay.remove();
         return;
@@ -170,7 +316,6 @@ function iniciarIntro() {
     const foguetesPorCiclo = isMobile ? 3 : 5;
     let encerrado = false;
 
-    // 1. FASE DE FOGO (Início)
     const intervaloLoop = setInterval(() => {
         for (let i = 0; i < foguetesPorCiclo; i++) {
             lancarFoguete(container, isMobile);
@@ -185,11 +330,9 @@ function iniciarIntro() {
         setTimeout(() => overlay.remove(), 700);
     }
 
-    // Permite saltar a intro ao tocar em qualquer parte do ecrã
     overlay.addEventListener('click', fecharIntro, { once: true });
     overlay.addEventListener('touchstart', fecharIntro, { once: true, passive: true });
 
-    // 2. FASE DE MENSAGEM (Aparece logo aos 0.3s)
     setTimeout(() => {
         if (message) {
             message.classList.remove('opacity-0', 'scale-90');
@@ -197,23 +340,19 @@ function iniciarIntro() {
         }
     }, 300);
 
-    // 3. FIM DA FESTA (Aos 3.5s)
     setTimeout(fecharIntro, 3500);
 }
 
-// Logica de lançar um foguete (baixo para cima)
 function lancarFoguete(container, isMobile) {
     if (!container) return;
 
     const rocket = document.createElement('div');
     rocket.className = 'rocket-particle';
 
-    // Posição inicial (Fundo do ecrã, posição X aleatória)
     const startX = Math.random() * window.innerWidth;
     rocket.style.left = startX + 'px';
     rocket.style.bottom = '0px';
 
-    // Altura aleatória para explodir
     const targetHeight = (window.innerHeight * 0.5) + (Math.random() * (window.innerHeight * 0.35));
     rocket.style.setProperty('--rise-height', `-${targetHeight}px`);
 
