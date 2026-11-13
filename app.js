@@ -316,7 +316,6 @@ function iniciarBrasasFundo() {
 document.addEventListener('DOMContentLoaded', () => {
     carregarGaleria();
     iniciarBrasasFundo();
-    iniciarIntro();
 });
 
 /**
