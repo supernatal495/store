@@ -8,7 +8,6 @@ let produtosRenderizados = [];
 function mudarAba(novoTipo) {
     tipoAtual = novoTipo;
 
-    // Limpa pesquisa ao trocar de aba para mostrar todos os itens da categoria
     const searchInput = document.getElementById('searchInput');
     if (searchInput && searchInput.value) {
         searchInput.value = '';
@@ -61,14 +60,15 @@ function gerarSpecPills(desc) {
 }
 
 /**
- * Renderiza a grelha de produtos com pesquisa, ordenação e visual de alto impacto
+ * Renderiza a grelha de produtos:
+ * - Produtos em stock aparecem SEMPRE primeiro (com destaque para NOVO 2026 e TOP)
+ * - Produtos esgotados vão SEMPRE para o fim da lista
  */
 function carregarGaleria() {
     const container = document.getElementById('galleryContainer');
     const loading = document.getElementById('loadingState');
     if (loading) loading.style.display = 'none';
 
-    // Atualiza contadores nas abas
     const countBat = document.getElementById('countBaterias');
     const countBomb = document.getElementById('countBombinhas');
     if (countBat && typeof listaProdutos !== 'undefined') countBat.textContent = listaProdutos.length;
@@ -82,7 +82,6 @@ function carregarGaleria() {
         return;
     }
 
-    // Filtro de pesquisa
     const termo = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
     const criterio = document.getElementById('sortSelect')?.value || 'destaque';
 
@@ -95,7 +94,7 @@ function carregarGaleria() {
         );
     });
 
-    // Ordenação
+    // Ordenação: Esgotados SEMPRE no fim da lista
     produtos.sort((a, b) => {
         const stockA = a.stock !== false ? 1 : 0;
         const stockB = b.stock !== false ? 1 : 0;
@@ -107,7 +106,12 @@ function carregarGaleria() {
         if (criterio === 'maior') {
             return parsePreco(b.preco) - parsePreco(a.preco);
         }
-        // Por defeito ('destaque'): Premium primeiro
+
+        // Em "Campanha 2026" (destaque): Novos 2026 primeiro, depois Premium
+        const novoA = a.novo === true ? 1 : 0;
+        const novoB = b.novo === true ? 1 : 0;
+        if (novoB !== novoA) return novoB - novoA;
+
         const premA = a.premium === true ? 1 : 0;
         const premB = b.premium === true ? 1 : 0;
         return premB - premA;
@@ -128,35 +132,54 @@ function carregarGaleria() {
     }
 
     let html = "";
+    let separadorEsgotadosInserido = false;
 
     produtos.forEach((prod, index) => {
         const temStock = typeof prod.stock !== 'undefined' ? prod.stock : true;
         const classEstoque = !temStock ? "out-of-stock pointer-events-none" : "";
-        const isPremium = prod.premium === true;
+        const isPremium = prod.premium === true && temStock;
+        const isNovo = prod.novo === true && temStock;
 
-        const badgePremium = isPremium ? `
+        // Insere um cabeçalho divisor elegante antes do primeiro produto esgotado
+        if (!temStock && !separadorEsgotadosInserido) {
+            separadorEsgotadosInserido = true;
+            html += `
+                <div class="col-span-full flex items-center gap-3 mt-6 mb-1">
+                    <div class="h-px bg-white/10 flex-grow"></div>
+                    <span class="font-display font-bold text-xs uppercase tracking-[0.2em] text-slate-500 px-3 py-1 rounded-full border border-white/10 bg-dark-900/80">
+                        Produtos Esgotados
+                    </span>
+                    <div class="h-px bg-white/10 flex-grow"></div>
+                </div>
+            `;
+        }
+
+        const badgeTopo = isNovo ? `
+            <div class="absolute top-2 left-2 badge-novo-2026 text-[10px] sm:text-xs font-display font-bold px-2.5 py-0.5 rounded-md uppercase tracking-wider z-20 flex items-center gap-1">
+                <i class="fas fa-fire text-[9px] text-yellow-200"></i> Novo 2026
+            </div>` : (isPremium ? `
             <div class="absolute top-2 left-2 bg-gradient-to-r from-gold-400 via-gold-500 to-ember-500 text-black text-[10px] sm:text-xs font-display font-bold px-2.5 py-0.5 rounded-md shadow-lg uppercase tracking-wider z-20 flex items-center gap-1">
                 <i class="fas fa-crown text-[9px]"></i> Top
-            </div>` : "";
+            </div>` : "");
 
-        const zoomHint = `
+        const zoomHint = temStock ? `
             <div class="absolute bottom-2 right-2 w-6 h-6 rounded-full bg-black/50 border border-white/15 text-slate-300 text-[10px] flex items-center justify-center z-20 opacity-80 group-hover:opacity-100">
                 <i class="fas fa-expand"></i>
-            </div>`;
+            </div>` : "";
 
-        const cardClass = isPremium ? "premium-card" : "";
-        const titleColor = isPremium ? "text-gold-300" : "text-white group-hover:text-gold-300";
-        const priceColor = isPremium ? "text-black" : "text-gold-400";
-        const euroColor = isPremium ? "text-black/80" : "text-ember-500";
+        const cardClass = (isPremium || isNovo) ? "premium-card" : "";
+        const titleColor = (isPremium || isNovo) ? "text-gold-300" : "text-white group-hover:text-gold-300";
+        const priceColor = (isPremium || isNovo) ? "text-black" : "text-gold-400";
+        const euroColor = (isPremium || isNovo) ? "text-black/80" : "text-ember-500";
 
         const loadingAttr = index < 4 ? 'eager' : 'lazy';
         const fallbackPng = prod.imagem.replace('.webp', '.png');
         const pillsHtml = gerarSpecPills(prod.desc);
 
         html += `
-            <div onclick="abrirModal(${index})" class="product-card ${cardClass} ${classEstoque} rounded-2xl overflow-hidden group relative flex flex-col justify-between cursor-pointer">
+            <div onclick="${temStock ? `abrirModal(${index})` : ''}" class="product-card ${cardClass} ${classEstoque} rounded-2xl overflow-hidden group relative flex flex-col justify-between ${temStock ? 'cursor-pointer' : ''}">
                 <div class="image-wrapper relative">
-                    ${badgePremium}
+                    ${badgeTopo}
                     ${zoomHint}
                     <img src="${pastaImagem}/${prod.imagem}" 
                          loading="${loadingAttr}" 
@@ -172,7 +195,7 @@ function carregarGaleria() {
                     </div>
 
                     <div class="price-box rounded-xl py-1.5 px-3 flex items-center justify-between">
-                        <span class="text-[10px] sm:text-xs uppercase tracking-wider font-bold ${isPremium ? 'text-black/75' : 'text-slate-400'}">Preço</span>
+                        <span class="text-[10px] sm:text-xs uppercase tracking-wider font-bold ${(isPremium || isNovo) ? 'text-black/75' : 'text-slate-400'}">${temStock ? 'Preço' : 'Indisponível'}</span>
                         <span class="font-display font-bold text-xl sm:text-2xl leading-none ${priceColor}">${prod.preco}<span class="text-xs sm:text-sm align-top ml-0.5 ${euroColor}">€</span></span>
                     </div>
                 </div>
@@ -252,16 +275,16 @@ function iniciarBrasasFundo() {
     }, { passive: true });
 
     const isMobile = w < 768;
-    const total = isMobile ? 22 : 45;
+    const total = isMobile ? 26 : 50;
     const cores = ['#FACC15', '#F97316', '#EF4444', '#FEF08A'];
 
     const brasas = Array.from({ length: total }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        r: 1 + Math.random() * 2.2,
-        vy: 0.35 + Math.random() * 0.85,
-        vx: (Math.random() - 0.5) * 0.4,
-        alpha: 0.2 + Math.random() * 0.6,
+        r: 1 + Math.random() * 2.4,
+        vy: 0.4 + Math.random() * 0.9,
+        vx: (Math.random() - 0.5) * 0.45,
+        alpha: 0.25 + Math.random() * 0.65,
         cor: cores[Math.floor(Math.random() * cores.length)]
     }));
 
@@ -297,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * SEQUENCIA DE INTRODUÇÃO BOMBASTICA
+ * SEQUENCIA DE INTRODUÇÃO BOMBASTICA — NOVA CAMPANHA 2026
  */
 function iniciarIntro() {
     const overlay = document.getElementById('intro-overlay');
@@ -306,11 +329,11 @@ function iniciarIntro() {
 
     if (!overlay) return;
 
-    if (sessionStorage.getItem('galofire_intro_seen') === '1') {
+    if (sessionStorage.getItem('galofire_2026_intro') === '1') {
         overlay.remove();
         return;
     }
-    sessionStorage.setItem('galofire_intro_seen', '1');
+    sessionStorage.setItem('galofire_2026_intro', '1');
 
     const isMobile = window.innerWidth < 768;
     const foguetesPorCiclo = isMobile ? 3 : 5;
@@ -320,7 +343,7 @@ function iniciarIntro() {
         for (let i = 0; i < foguetesPorCiclo; i++) {
             lancarFoguete(container, isMobile);
         }
-    }, 180);
+    }, 170);
 
     function fecharIntro() {
         if (encerrado) return;
@@ -338,9 +361,9 @@ function iniciarIntro() {
             message.classList.remove('opacity-0', 'scale-90');
             message.classList.add('opacity-100', 'scale-100');
         }
-    }, 300);
+    }, 250);
 
-    setTimeout(fecharIntro, 3500);
+    setTimeout(fecharIntro, 3600);
 }
 
 function lancarFoguete(container, isMobile) {
@@ -367,7 +390,7 @@ function lancarFoguete(container, isMobile) {
 
 function criarExplosao(container, x, y, isMobile) {
     const cores = ['#FACC15', '#EAB308', '#EF4444', '#FFFFFF', '#3B82F6', '#10B981', '#D946EF'];
-    const particulas = isMobile ? 22 : 40;
+    const particulas = isMobile ? 24 : 40;
 
     for (let i = 0; i < particulas; i++) {
         const p = document.createElement('div');
@@ -378,7 +401,7 @@ function criarExplosao(container, x, y, isMobile) {
         p.style.top = y + 'px';
 
         const angle = Math.random() * Math.PI * 2;
-        const velocity = (isMobile ? 55 : 80) + Math.random() * (isMobile ? 130 : 200);
+        const velocity = (isMobile ? 60 : 80) + Math.random() * (isMobile ? 135 : 200);
 
         p.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
         p.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
