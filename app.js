@@ -15,8 +15,8 @@ function mudarAba(novoTipo) {
 
     // Classes CSS (Tailwind) para estados Ativo e Inativo
     // Nota: 'active-tab' contem estilos extra no style.css
-    const classesAtivo = 'tab-btn active-tab px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold transition-all duration-300 flex items-center gap-2 rounded-full';
-    const classesInativo = 'tab-btn px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 rounded-full';
+    const classesAtivo = 'tab-btn active-tab px-5 py-2 text-xs sm:px-8 sm:py-3 sm:text-lg font-bold transition-all duration-300 flex items-center gap-2 rounded-full';
+    const classesInativo = 'tab-btn px-5 py-2 text-xs sm:px-8 sm:py-3 sm:text-lg font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 rounded-full';
 
     // Aplica as classes consoante a seleção
     if (tipoAtual === 'baterias') {
@@ -30,29 +30,36 @@ function mudarAba(novoTipo) {
 
 /**
  * Função Principal de Renderização
- * Le os dados (listaProdutos ou listaPetardos) e gera o HTML.
+ * Le os dados (listaProdutos ou listaPetardos), ordena stock disponível primeiro e gera o HTML.
  */
 function carregarGaleria() {
     const container = document.getElementById('galleryContainer');
     const loading = document.getElementById('loadingState');
 
     // Esconde a animação de loading
-    loading.style.display = 'none';
+    if (loading) loading.style.display = 'none';
 
     // Seleciona a lista de dados e a pasta de imagens correta
-    const produtos = tipoAtual === 'baterias' ? listaProdutos : listaPetardos;
+    const produtosBase = tipoAtual === 'baterias' ? listaProdutos : listaPetardos;
     const pastaImagem = tipoAtual === 'baterias' ? 'baterias' : 'petardo';
 
     // Validação de segurança se a lista estiver vazia
-    if (typeof produtos === 'undefined' || produtos.length === 0) {
+    if (typeof produtosBase === 'undefined' || produtosBase.length === 0) {
         container.innerHTML = '<div class="col-span-full text-center text-slate-500 mt-10">Sem produtos.</div>';
         return;
     }
 
+    // Ordena automaticamente: produtos em stock primeiro, esgotados no fim
+    const produtos = [...produtosBase].sort((a, b) => {
+        const stockA = a.stock !== false ? 1 : 0;
+        const stockB = b.stock !== false ? 1 : 0;
+        return stockB - stockA;
+    });
+
     let html = "";
 
     // Loop através de cada produto para criar o cartão
-    produtos.forEach(prod => {
+    produtos.forEach((prod, index) => {
         let badgePremium = "";
         let badgePoucasUnidades = "";
         let classPremium = "";
@@ -64,13 +71,6 @@ function carregarGaleria() {
         let priceColorClass = 'text-slate-200';
         let euroColorClass = 'text-gold-500';
 
-        // Lógica: Determinar se o título começa por número (ex: "36 Tiros")
-        let primeiraPalavra = prod.desc.split(' ')[0];
-        let textoTag = primeiraPalavra;
-        if (!isNaN(primeiraPalavra)) {
-            textoTag += " Tiros";
-        }
-
         // --- SISTEMA DE STOCK ---
         // Verifica se existe a propriedade stock (default true)
         const temStock = typeof prod.stock !== 'undefined' ? prod.stock : true;
@@ -79,7 +79,7 @@ function carregarGaleria() {
             // Se não tiver stock:
             // 1. Aplica classe CSS que mete a cinzento e bloqueia cliques
             classEstoque = "out-of-stock pointer-events-none";
-            // 2. Cria div vazia para ajudar no posicionamento do carimbo (opcional)
+            // 2. Cria div vazia para ajudar no posicionamento do carimbo
             badgeEsgotado = `<div class="absolute inset-0 z-10"></div>`;
         }
 
@@ -87,8 +87,8 @@ function carregarGaleria() {
         const isPoucasUnidades = typeof prod.poucasUnidades !== 'undefined' ? prod.poucasUnidades : false;
         if (isPoucasUnidades && temStock) {
             badgePoucasUnidades = `
-                <div class="absolute top-0 right-0 bg-gradient-to-r from-red-600 to-orange-600 text-white text-xs font-black px-4 py-1.5 rounded-bl-xl shadow-lg uppercase tracking-wider z-20 animate-pulse-alert">
-                    <i class="fas fa-fire-alt mr-1"></i> Poucas Unidades
+                <div class="absolute top-0 right-0 bg-gradient-to-r from-red-600 to-orange-600 text-white text-[10px] sm:text-xs font-black px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-bl-xl shadow-lg uppercase tracking-wider z-20 animate-pulse-alert">
+                    <i class="fas fa-fire-alt mr-1"></i> Poucas Unid.
                 </div>`;
         }
 
@@ -96,7 +96,7 @@ function carregarGaleria() {
         if (prod.premium === true) {
             // Se for Premium: adiciona borda dourada e badge "Coroa"
             badgePremium = `
-                <div class="absolute top-0 left-0 bg-gradient-to-r from-gold-500 to-yellow-700 text-black text-xs font-black px-4 py-1.5 rounded-br-xl shadow-lg uppercase tracking-wider z-20">
+                <div class="absolute top-0 left-0 bg-gradient-to-r from-gold-500 to-yellow-700 text-black text-[10px] sm:text-xs font-black px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-br-xl shadow-lg uppercase tracking-wider z-20">
                     <i class="fas fa-crown mr-1"></i> Premium
                 </div>`;
             classPremium = "premium-border";
@@ -107,24 +107,31 @@ function carregarGaleria() {
             euroColorClass = 'text-gold-400';
         }
 
-        // Constrói o HTML do Cartão
+        // Os primeiros 4 produtos carregam imediatamente (acima da dobra no telemóvel), restantes com lazy loading
+        const loadingAttr = index < 4 ? 'eager' : 'lazy';
+        const fallbackPng = prod.imagem.replace('.webp', '.png');
+
+        // Constrói o HTML do Cartão (Otimizado para 2 colunas em mobile)
         html += `
-            <div class="product-card rounded-2xl overflow-hidden group product-item ${classPremium} ${classEstoque} relative">
+            <div class="product-card rounded-xl sm:rounded-2xl overflow-hidden group product-item ${classPremium} ${classEstoque} relative flex flex-col justify-between">
                 <div class="image-wrapper relative">
                     ${badgePremium}
                     ${badgePoucasUnidades}
                     ${badgeEsgotado}
                     
-                    <!-- Imagem com Lazy Loading e Fallback de erro -->
+                    <!-- Imagem WebP com Fallback automático para PNG e Placeholder -->
                     <img src="${pastaImagem}/${prod.imagem}" 
-                            loading="lazy" 
-                            onerror="this.src='https://placehold.co/600x400/1e293b/FFF?text=GaloFire'" 
+                            loading="${loadingAttr}" 
+                            decoding="async"
+                            onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='${pastaImagem}/${fallbackPng}';}else{this.src='https://placehold.co/600x400/1e293b/FFF?text=GaloFire';}" 
                             alt="${prod.titulo}" class="product-image">
                 </div>
-                <div class="p-5 text-center">
-                    <h3 class="text-2xl font-bold ${titleColorClass} mb-2 transition-colors">${prod.titulo}</h3>
-                    <p class="text-xl font-semibold text-gold-400 mb-2">${prod.desc}</p>
-                    <span class="text-3xl font-black ${priceColorClass}">${prod.preco}<span class="text-xl align-top ${euroColorClass}">€</span></span>
+                <div class="p-3 sm:p-5 text-center flex flex-col flex-grow justify-between">
+                    <div>
+                        <h3 class="text-base sm:text-2xl font-bold ${titleColorClass} mb-1 sm:mb-2 leading-tight transition-colors">${prod.titulo}</h3>
+                        <p class="text-xs sm:text-xl font-semibold text-gold-400 mb-2 min-h-[1rem]">${prod.desc}</p>
+                    </div>
+                    <span class="text-2xl sm:text-3xl font-black ${priceColorClass}">${prod.preco}<span class="text-sm sm:text-xl align-top ${euroColorClass}">€</span></span>
                 </div>
             </div>
         `;
@@ -134,57 +141,68 @@ function carregarGaleria() {
     container.innerHTML = html;
 }
 
-// Inicia a galeria quando a janela carrega
-// Inicia a galeria quando a janela carrega
-window.onload = function () {
+// Inicia a galeria assim que o DOM está pronto (muito mais rápido em redes móveis do que window.onload)
+document.addEventListener('DOMContentLoaded', () => {
     carregarGaleria();
     iniciarIntro();
-};
+});
 
 /**
- * SEQUENCIA DE INTRODUÇÃO BOMBASTICA
- * 1. Rockets sobem (3 segundos)
- * 2. Mensagem aparece (1 segundo)
- * 3. Site revela-se
+ * SEQUENCIA DE INTRODUÇÃO BOMBASTICA (Otimizada para Mobile)
+ * - Permite fechar ao tocar no ecrã
+ * - Guarda em sessionStorage para não repetir se o utilizador atualizar a página
  */
 function iniciarIntro() {
     const overlay = document.getElementById('intro-overlay');
     const container = document.getElementById('fireworks-container');
     const message = document.getElementById('intro-message');
 
-    // 1. FASE DE FOGO ( Início )
+    if (!overlay) return;
+
+    // Se já viu a intro nesta sessão, remove imediatamente sem bloquear
+    if (sessionStorage.getItem('galofire_intro_seen') === '1') {
+        overlay.remove();
+        return;
+    }
+    sessionStorage.setItem('galofire_intro_seen', '1');
+
+    const isMobile = window.innerWidth < 768;
+    const foguetesPorCiclo = isMobile ? 3 : 5;
+    let encerrado = false;
+
+    // 1. FASE DE FOGO (Início)
     const intervaloLoop = setInterval(() => {
-        // CAOS TOTAL: 5 Foguetes de cada vez
-        lancarFoguete(container);
-        lancarFoguete(container);
-        lancarFoguete(container);
-        lancarFoguete(container);
-        lancarFoguete(container);
-    }, 150);
+        for (let i = 0; i < foguetesPorCiclo; i++) {
+            lancarFoguete(container, isMobile);
+        }
+    }, 180);
 
-    // 2. FASE DE MENSAGEM (Aparece logo aos 0.5s para leitura conjunta com o fogo)
-    setTimeout(() => {
-        // Revela a mensagem enquanto o fogo continua
-        message.classList.remove('opacity-0', 'scale-0');
-        message.classList.add('opacity-100', 'scale-100');
-    }, 500);
-
-    // 3. FIM DA FESTA (Aos 4.5s -> 4s de leitura/fogo)
-    setTimeout(() => {
-        clearInterval(intervaloLoop); // Pára os foguetes
-
-        // Desaparece tudo
+    function fecharIntro() {
+        if (encerrado) return;
+        encerrado = true;
+        clearInterval(intervaloLoop);
         overlay.classList.add('fade-out');
+        setTimeout(() => overlay.remove(), 700);
+    }
 
-        setTimeout(() => {
-            overlay.remove();
-        }, 1000);
+    // Permite saltar a intro ao tocar em qualquer parte do ecrã
+    overlay.addEventListener('click', fecharIntro, { once: true });
+    overlay.addEventListener('touchstart', fecharIntro, { once: true, passive: true });
 
-    }, 4500);
+    // 2. FASE DE MENSAGEM (Aparece logo aos 0.3s)
+    setTimeout(() => {
+        if (message) {
+            message.classList.remove('opacity-0', 'scale-90');
+            message.classList.add('opacity-100', 'scale-100');
+        }
+    }, 300);
+
+    // 3. FIM DA FESTA (Aos 3.5s)
+    setTimeout(fecharIntro, 3500);
 }
 
 // Logica de lançar um foguete (baixo para cima)
-function lancarFoguete(container) {
+function lancarFoguete(container, isMobile) {
     if (!container) return;
 
     const rocket = document.createElement('div');
@@ -196,53 +214,38 @@ function lancarFoguete(container) {
     rocket.style.bottom = '0px';
 
     // Altura aleatória para explodir
-    const targetHeight = (window.innerHeight * 0.5) + (Math.random() * (window.innerHeight * 0.4));
-    // Converter para pixeis negativos para o transform translateY
+    const targetHeight = (window.innerHeight * 0.5) + (Math.random() * (window.innerHeight * 0.35));
     rocket.style.setProperty('--rise-height', `-${targetHeight}px`);
 
     container.appendChild(rocket);
 
-    // Quando a animação de subida acabar, EXPLODIR!
-    // Nota: O user tinha posto 200ms, mas isso corta a subida. 
-    // Coloquei 700ms para dar tempo de "subir" visualmente no telemóvel.
     setTimeout(() => {
-        // Coordenadas da explosão
-        // O rocket subiu 'targetHeight' pixeis a partir de baixo.
-        // Y = Altura Janela - TargetHeight
         const explosionY = window.innerHeight - targetHeight;
-
-        criarExplosao(container, startX, explosionY);
+        criarExplosao(container, startX, explosionY, isMobile);
         rocket.remove();
-    }, 700);
+    }, 650);
 }
 
-
-function criarExplosao(container, x, y) {
-    const cores = ['#FACC15', '#EAB308', '#EF4444', '#FFFFFF', '#3B82F6', '#10B981', '#D946EF']; // Mais cores festivas
-    const particulas = 40; // Mantive 40 para não crashar telemóveis (com 5 foguetes = 200 partículas/ciclo)
+function criarExplosao(container, x, y, isMobile) {
+    const cores = ['#FACC15', '#EAB308', '#EF4444', '#FFFFFF', '#3B82F6', '#10B981', '#D946EF'];
+    const particulas = isMobile ? 22 : 40;
 
     for (let i = 0; i < particulas; i++) {
         const p = document.createElement('div');
         p.className = 'firework-particle';
 
-        // Cor aleatória
         p.style.backgroundColor = cores[Math.floor(Math.random() * cores.length)];
-
-        // Posição explosão
         p.style.left = x + 'px';
         p.style.top = y + 'px';
 
-        // Direção aleatória
         const angle = Math.random() * Math.PI * 2;
-        // VELOCIDADE MASSIVA: Explosões gigantes
-        const velocity = 80 + Math.random() * 200;
+        const velocity = (isMobile ? 55 : 80) + Math.random() * (isMobile ? 130 : 200);
 
         p.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
         p.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
 
         container.appendChild(p);
 
-        // Remove a partícula após a animação
-        setTimeout(() => p.remove(), 1000);
+        setTimeout(() => p.remove(), 950);
     }
 }

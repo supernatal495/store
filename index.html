@@ -22,8 +22,8 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="GaloFire - Barcelos tem o Galo, nós tratamos do estalo!">
     <meta property="og:description" content="Veja o nosso catálogo 2025.">
-    <meta property="og:image" content="https://galofire.pages.dev/image_e91485.jpg">
-    <link rel="icon" type="image/jpeg" href="image_e91485.jpg">
+    <meta property="og:image" content="https://galofire.pages.dev/ico.jpg">
+    <link rel="icon" type="image/jpeg" href="ico.jpg">
 
     <!-- 
         Bibliotecas Externas (CDNs)
@@ -31,6 +31,8 @@
         - FontAwesome: Ícones
         - Google Fonts: Tipo de letra 'Outfit'
     -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
@@ -70,16 +72,16 @@
         Contém o logótipo e ícones sociais.
     -->
     <nav
-        class="fixed top-0 w-full z-50 bg-dark-900/90 backdrop-blur-xl border-b border-gold-400/20 shadow-2xl transition-all duration-300">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        class="fixed top-0 w-full z-50 bg-dark-900/95 backdrop-blur-md border-b border-gold-400/20 shadow-2xl transition-all duration-300">
+        <div class="container mx-auto px-4 py-2.5 sm:py-3 flex justify-between items-center">
 
             <!-- Logótipo (clicável para ir ao topo) -->
             <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
                 <div class="flex flex-col">
-                    <span class="font-black text-2xl md:text-3xl text-white tracking-wide uppercase leading-none">
+                    <span class="font-black text-xl sm:text-2xl md:text-3xl text-white tracking-wide uppercase leading-none">
                         Galo<span class="text-gold-400">Fire</span>
                     </span>
-                    <span class="text-xs text-gold-400 tracking-widest uppercase font-semibold">Barcelos</span>
+                    <span class="text-[10px] sm:text-xs text-gold-400 tracking-widest uppercase font-semibold">Barcelos</span>
                 </div>
             </div>
 
@@ -92,15 +94,15 @@
 
     <!-- 
         Cabeçalho Principal (Hero Section)
-        Apresenta o título principal e o slogan animado.
+        Apresenta o título principal e o slogan animado (Compactado em mobile para mostrar logo os produtos).
     -->
-    <header class="pt-32 pb-8 px-4 text-center animate-fade-in-down">
-        <h1 class="logo-glow text-6xl md:text-8xl font-black text-white mb-6 uppercase tracking-tight relative z-10">
+    <header class="pt-20 pb-3 sm:pt-32 sm:pb-8 px-4 text-center animate-fade-in-down">
+        <h1 class="logo-glow text-4xl sm:text-6xl md:text-8xl font-black text-white mb-2 sm:mb-6 uppercase tracking-tight relative z-10">
             Galo<span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-orange-500">Fire</span>
         </h1>
 
-        <p class="subtitle-shadow text-gold-400 text-2xl md:text-4xl mb-8 italic font-bold px-2">
-            <i class="fas fa-fire text-gold-500 mr-2 animate-pulse"></i>
+        <p class="subtitle-shadow text-gold-400 text-base sm:text-2xl md:text-4xl mb-2 sm:mb-8 italic font-bold px-2">
+            <i class="fas fa-fire text-gold-500 mr-1.5 sm:mr-2 animate-pulse"></i>
             "Barcelos tem o Galo, nós tratamos do estalo!"
         </p>
     </header>
@@ -109,24 +111,24 @@
         Conteúdo Principal 
         Contém as abas de navegação e a grelha de produtos.
     -->
-    <main class="container mx-auto px-4 pb-20 flex-grow">
+    <main class="container mx-auto px-3 sm:px-4 pb-16 sm:pb-20 flex-grow">
 
         <!-- NOVA NAVEGAÇÃO POR ABAS (Mobile First Sticky) -->
-        <div class="flex justify-center mb-10 sticky top-24 z-40">
+        <div class="flex justify-center mb-6 sm:mb-10 sticky top-16 sm:top-24 z-40">
             <div class="glass-tabs p-1 rounded-full inline-flex relative shadow-2xl">
                 <button onclick="mudarAba('baterias')" id="tabBaterias"
-                    class="tab-btn active-tab px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold transition-all duration-300 flex items-center gap-2 rounded-full">
+                    class="tab-btn active-tab px-5 py-2 text-xs sm:px-8 sm:py-3 sm:text-lg font-bold transition-all duration-300 flex items-center gap-2 rounded-full">
                     <i class="fas fa-battery-three-quarters"></i> Baterias
                 </button>
                 <button onclick="mudarAba('bombinhas')" id="tabBombinhas"
-                    class="tab-btn px-6 py-2 text-sm sm:px-8 sm:py-3 sm:text-lg font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 rounded-full">
+                    class="tab-btn px-5 py-2 text-xs sm:px-8 sm:py-3 sm:text-lg font-bold text-slate-400 hover:text-white transition-all duration-300 flex items-center gap-2 rounded-full">
                     <i class="fas fa-bomb"></i> Bombinhas
                 </button>
             </div>
         </div>
 
-        <!-- Container onde os produtos são injetados pelo JavaScript -->
-        <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Container onde os produtos são injetados pelo JavaScript (2 colunas em mobile) -->
+        <div id="galleryContainer" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
         </div>
 
         <!-- Indicador de Loading inicial -->
@@ -136,23 +138,24 @@
         </div>
     </main>
 
-
-
-    <footer class="border-t border-slate-800 py-10 text-center bg-dark-900">
+    <footer class="border-t border-slate-800 py-8 sm:py-10 text-center bg-dark-900">
         <p class="text-slate-500 text-sm">© 2025 GaloFire.</p>
     </footer>
 
-    <!-- INTRO OVERLAY BOMBASTICO -->
+    <!-- INTRO OVERLAY BOMBASTICO (Clicável para saltar em mobile) -->
     <div id="intro-overlay"
-        class="fixed inset-0 z-[100] bg-black/80 flex flex-col items-center justify-center transition-opacity duration-1000">
+        class="fixed inset-0 z-[100] bg-black/85 flex flex-col items-center justify-center transition-opacity duration-700 cursor-pointer select-none">
         <div id="intro-message"
-            class="text-center z-10 p-5 opacity-0 transition-opacity duration-500 scale-0 transform">
+            class="text-center z-10 p-5 opacity-0 transition-all duration-500 scale-90 transform">
             <h1
-                class="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-orange-500 mb-4 animate-bounce">
+                class="text-4xl sm:text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-gold-400 to-orange-500 mb-4 animate-bounce">
                 Bem-vindo ao GaloFire!
             </h1>
-            <p class="text-2xl md:text-4xl text-white font-bold animate-pulse">
+            <p class="text-xl sm:text-2xl md:text-4xl text-white font-bold animate-pulse">
                 Faz a festa connosco! 🎆
+            </p>
+            <p class="text-xs text-slate-400 mt-6 uppercase tracking-widest opacity-80">
+                Toca no ecrã para entrar
             </p>
         </div>
         <!-- Container para os foguetes -->
@@ -160,14 +163,10 @@
     </div>
 
     <!-- 
-        Scripts do Site
-        O timestamp é usado para prevenir que o browser guarde versões antigas dos dados (Cache Busting).
+        Scripts do Site (Carregamento com defer para não bloquear a renderização em mobile)
     -->
-    <script>
-        const timestamp = new Date().getTime();
-        document.write('<script src="dados.js?v=' + timestamp + '"><\/script>');
-        document.write('<script src="app.js?v=' + timestamp + '" defer><\/script>');
-    </script>
+    <script src="dados.js" defer></script>
+    <script src="app.js" defer></script>
 </body>
 
 </html>

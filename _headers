@@ -1,0 +1,17 @@
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/dados.js
+  Cache-Control: no-cache, must-revalidate
+
+/app.js
+  Cache-Control: no-cache, must-revalidate
+
+/style.css
+  Cache-Control: no-cache, must-revalidate
+
+/baterias/*
+  Cache-Control: public, max-age=604800
+
+/petardo/*
+  Cache-Control: public, max-age=604800

@@ -29,6 +29,14 @@ body {
     overflow-x: hidden;
 }
 
+/* Otimização de Scroll para Mobile (Evita lag de GPU em iOS/Android com background fixed) */
+@media (max-width: 767px) {
+    body {
+        background-attachment: scroll;
+        background-size: cover, cover, cover, cover, 220px 220px, cover;
+    }
+}
+
 /*
            Efeitos Especiais de Texto
         */
@@ -48,19 +56,22 @@ body {
 }
 
 /*
-           Cartões de Produto (Glassmorphism)
+           Cartões de Produto (Glassmorphism otimizado para Mobile)
         */
 .product-card {
-    background: rgba(15, 23, 42, 0.85);
-    /* Fundo semi-transparente */
-    backdrop-filter: blur(20px);
-    /* Efeito de vidro fosco */
+    background: rgba(15, 23, 42, 0.92);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.25s ease, border-color 0.25s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
 @media (min-width: 768px) {
+    .product-card {
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
     .product-card:hover {
         transform: translateY(-8px);
         border-color: rgba(234, 179, 8, 0.4);
@@ -81,14 +92,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 8px;
 }
 
 .product-image {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    transition: transform 0.7s ease;
+    transition: transform 0.5s ease;
 }
 
 @media (min-width: 640px) {
@@ -102,7 +113,7 @@ body {
 .premium-border {
     /* Destaque premium mais forte */
     border: 2px solid #EAB308;
-    box-shadow: 0 0 30px rgba(234, 179, 8, 0.4);
+    box-shadow: 0 0 20px rgba(234, 179, 8, 0.35);
 }
 
 .insta-border {
@@ -148,13 +159,12 @@ body {
            Estilo High Visibility para fácil identificação
         */
 .glass-tabs {
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba(15, 23, 42, 0.96);
     /* Fundo quase opaco */
     border: 2px solid rgba(234, 179, 8, 0.3);
     /* Borda dourada subtil */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    padding: 8px;
-    /* Mais espaço à volta */
+    padding: 6px;
 }
 
 .tab-btn {
@@ -176,8 +186,7 @@ body {
     box-shadow: 0 0 20px rgba(234, 179, 8, 0.6);
     /* Glow forte */
     opacity: 1;
-    transform: scale(1.05);
-    /* Ligeiro aumento */
+    transform: scale(1.03);
 }
 
 /*
@@ -185,7 +194,7 @@ body {
            Efeito visual de produto indisponível
         */
 .out-of-stock .product-image {
-    filter: grayscale(100%) opacity(0.6);
+    filter: grayscale(100%) opacity(0.55);
     /* Preto e branco + transparente */
 }
 
@@ -195,17 +204,26 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-15deg);
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     border: 2px solid #ef4444;
     color: #ef4444;
-    padding: 10px 20px;
+    padding: 6px 12px;
     font-weight: 900;
-    font-size: 1.5rem;
-    letter-spacing: 2px;
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
     z-index: 30;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     pointer-events: none;
+    white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+    .out-of-stock .image-wrapper::after {
+        padding: 10px 20px;
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+    }
 }
 
 .out-of-stock-badge {
@@ -214,7 +232,7 @@ body {
 }
 
 /*
-           Animação de Fogo de Artifício (Navbar)
+           Animação de Fogo de Artifício (Intro)
         */
 .firework-particle {
     position: absolute;
@@ -223,6 +241,7 @@ body {
     border-radius: 50%;
     pointer-events: none;
     animation: explode 1s ease-out forwards;
+    will-change: transform, opacity;
 }
 
 @keyframes explode {
@@ -244,9 +263,8 @@ body {
     height: 15px;
     background: linear-gradient(to top, rgba(255, 255, 0, 0), #FACC15);
     border-radius: 2px;
-    animation: rise 1s ease-out forwards;
+    animation: rise 0.7s ease-out forwards;
     will-change: transform, opacity;
-    /* Otimização Mobile */
 }
 
 @keyframes rise {
