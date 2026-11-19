@@ -34,7 +34,6 @@ const listaPetardos = [
     { id: "6", titulo: "Foguete Viagem Lunar", desc: "144 UNIDADES", preco: "20", imagem: "6.webp", premium: false, novo: false, stock: true, poucasUnidades: false },
     { id: "7", titulo: "Candelas", desc: "Candelas 12 UNIDADES", preco: "15", imagem: "7.webp", premium: false, novo: false, stock: true, poucasUnidades: false },
     { id: "3", titulo: "P2", desc: "Caixa P2 10 UNIDADES", preco: "10", imagem: "3.webp", premium: false, novo: false, stock: true, poucasUnidades: false },
-    { id: "4", titulo: "Valencianetes", desc: "Valencianetes 20 UNIDADES", preco: "10", imagem: "4.webp", premium: false, novo: false, stock: true, poucasUnidades: false },
     { id: "8", titulo: "Americanos", desc: "100 UNIDADES", preco: "7,50", imagem: "8.webp", premium: false, novo: false, stock: true, poucasUnidades: false },
     { id: "2", titulo: "25 Pk2", desc: "", preco: "6", imagem: "2.webp", premium: false, novo: false, stock: true, poucasUnidades: false },
     { id: "1", titulo: "Traças", desc: "1 UNIDADE", preco: "1", imagem: "1.webp", premium: false, novo: false, stock: true, poucasUnidades: false },
