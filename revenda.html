@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>GaloFire 2026 — Tabela de Preços por Quantidade</title>
+    <link rel="icon" type="image/jpeg" href="ico.jpg">
+
+    <!-- Fontes & Ícones -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,700&family=Outfit:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Chakra Petch', 'sans-serif']
+                    },
+                    colors: {
+                        gold: { 300: '#FDE047', 400: '#FACC15', 500: '#EAB308', 600: '#CA8A04' },
+                        ember: { 500: '#F97316', 600: '#EA580C', 700: '#C2410C' },
+                        dark: { 950: '#040508', 900: '#090D16', 800: '#111827' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #040508;
+            background-image:
+                radial-gradient(ellipse 85% 50% at 50% -5%, rgba(234, 88, 12, 0.28) 0%, rgba(220, 38, 38, 0.1) 40%, transparent 70%),
+                radial-gradient(circle at 90% 20%, rgba(250, 204, 21, 0.12) 0%, transparent 40%),
+                linear-gradient(180deg, #040508 0%, #090d16 50%, #040508 100%);
+        }
+
+        .hero-fire-text {
+            background: linear-gradient(135deg, #FEF08A 0%, #FACC15 35%, #F97316 70%, #EF4444 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 22px rgba(249, 115, 22, 0.45));
+        }
+
+        .product-card {
+            background: linear-gradient(165deg, rgba(17, 24, 39, 0.96) 0%, rgba(9, 13, 22, 0.99) 100%);
+            border: 1px solid rgba(250, 204, 21, 0.25);
+            box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.7);
+        }
+
+        .image-stage {
+            background: radial-gradient(circle at 50% 55%, rgba(249, 115, 22, 0.22) 0%, rgba(234, 179, 8, 0.1) 45%, #060911 100%);
+        }
+
+        .tier-best {
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.2) 0%, rgba(249, 115, 22, 0.25) 100%);
+            border-color: rgba(250, 204, 21, 0.7);
+            box-shadow: 0 0 18px rgba(249, 115, 22, 0.25);
+        }
+    </style>
+</head>
+
+<body class="text-slate-100 antialiased min-h-screen flex flex-col selection:bg-gold-500 selection:text-black">
+
+    <!-- Cabeçalho -->
+    <header class="pt-8 pb-6 px-4 text-center border-b border-white/10 bg-dark-950/60">
+        <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-gradient-to-r from-red-600 via-ember-600 to-gold-500 text-white font-display font-bold text-xs uppercase tracking-[0.2em] mb-3 shadow-lg">
+            <i class="fas fa-fire"></i> Tabela Especial por Quantidade • 2026
+        </div>
+
+        <h1 class="font-display font-bold text-4xl sm:text-6xl uppercase tracking-wider leading-none mb-2">
+            <span>GALO</span><span class="hero-fire-text">FIRE</span>
+        </h1>
+        <p class="text-gold-300 text-xs sm:text-base italic font-semibold">
+            "Barcelos tem o Galo, nós tratamos do estalo!" — Preços unitários conforme quantidade
+        </p>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="container mx-auto px-3 sm:px-6 py-6 sm:py-10 flex-grow max-w-6xl space-y-10">
+
+        <!-- 1. GRELHA VISUAL COM FOTOS E ESCALÕES DE PREÇO -->
+        <section>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-display font-bold text-lg sm:text-2xl uppercase tracking-wider text-white flex items-center gap-2">
+                    <i class="fas fa-fire-flame-curved text-ember-500"></i> Catálogo de Baterias por Escalão
+                </h2>
+                <span class="text-xs text-slate-400 font-semibold">Valores por unidade (€)</span>
+            </div>
+
+            <div id="cardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"></div>
+        </section>
+
+        <!-- 2. TABELA RESUMO DIRETA (ESTILO FOLHA DE CÁLCULO COM FOTO) -->
+        <section class="bg-dark-900/95 border border-gold-400/30 rounded-3xl overflow-hidden shadow-2xl">
+            <div class="px-4 sm:px-6 py-4 bg-dark-950 border-b border-white/10 flex flex-wrap items-center justify-between gap-2">
+                <h2 class="font-display font-bold text-base sm:text-xl uppercase tracking-wider text-gold-400 flex items-center gap-2">
+                    <i class="fas fa-table"></i> Tabela Resumo de Preços
+                </h2>
+                <span class="text-[11px] sm:text-xs text-slate-400">Preço por unidade em cada escalão</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-dark-950/80 border-b border-white/10 font-display text-[11px] sm:text-xs uppercase tracking-wider text-slate-400">
+                            <th class="py-3 px-3 sm:px-5">Produto</th>
+                            <th class="py-3 px-2 sm:px-4">Descrição</th>
+                            <th class="py-3 px-2 sm:px-4 text-center">PVP Base</th>
+                            <th class="py-3 px-2 sm:px-4 text-center text-white bg-white/5">1 Unid.</th>
+                            <th class="py-3 px-2 sm:px-4 text-center text-amber-300 bg-amber-500/10">2 Unid.</th>
+                            <th class="py-3 px-3 sm:px-5 text-center text-gold-300 bg-gold-500/15">5 Unid.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="divide-y divide-white/10 text-xs sm:text-sm"></tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-white/10 py-6 text-center bg-dark-950 text-xs text-slate-500">
+        © 2026 GaloFire Barcelos • Tabela de Preços por Quantidade
+    </footer>
+
+    <script>
+        const tabelaBaterias = [
+            {
+                produto: "Happy Panda",
+                descricao: "36 Tiros Calibre 16",
+                imagem: "baterias/7.webp",
+                fallback: "baterias/7.png",
+                precoBase: "20,00 €",
+                u1: "16,00 €",
+                u2: "14,00 €",
+                u5: "12,00 €"
+            },
+            {
+                produto: "Firefox",
+                descricao: "25 Tiros Calibre 20",
+                imagem: "baterias/14.webp",
+                fallback: "baterias/14.png",
+                precoBase: "20,00 €",
+                u1: "16,00 €",
+                u2: "15,00 €",
+                u5: "14,00 €"
+            },
+            {
+                produto: "Feliz Ano Novo",
+                descricao: "36 Tiros Calibre 18",
+                imagem: "baterias/2.webp",
+                fallback: "baterias/2.png",
+                precoBase: "25,00 €",
+                u1: "21,00 €",
+                u2: "20,00 €",
+                u5: "17,50 €"
+            },
+            {
+                produto: "Vampire",
+                descricao: "36 Tiros Calibre 20",
+                imagem: "baterias/13.webp",
+                fallback: "baterias/13.png",
+                precoBase: "30,00 €",
+                u1: "25,00 €",
+                u2: "23,00 €",
+                u5: "20,00 €"
+            },
+            {
+                produto: "Clown",
+                descricao: "49 Tiros Calibre 20",
+                imagem: "baterias/12.webp",
+                fallback: "baterias/12.png",
+                precoBase: "35,00 €",
+                u1: "30,00 €",
+                u2: "28,00 €",
+                u5: "25,00 €"
+            },
+            {
+                produto: "Devils Cry",
+                descricao: "100 Tiros Calibre 20",
+                imagem: "baterias/11.webp",
+                fallback: "baterias/11.png",
+                precoBase: "70,00 €",
+                u1: "60,00 €",
+                u2: "56,00 €",
+                u5: "50,00 €"
+            },
+            {
+                produto: "Gunfire",
+                descricao: "100 Tiros Calibre 20",
+                imagem: "baterias/4.webp",
+                fallback: "baterias/4.png",
+                precoBase: "75,00 €",
+                u1: "64,00 €",
+                u2: "61,00 €",
+                u5: "57,50 €"
+            },
+            {
+                produto: "Pro",
+                descricao: "200 Tiros Calibre 20",
+                imagem: "baterias/8.webp",
+                fallback: "baterias/8.png",
+                precoBase: "150,00 €",
+                u1: "130,00 €",
+                u2: "120,00 €",
+                u5: "110,00 €"
+            }
+        ];
+
+        function renderizar() {
+            const grid = document.getElementById('cardsGrid');
+            const tbody = document.getElementById('tableBody');
+
+            // 1. Renderizar Cartões Visuais
+            grid.innerHTML = tabelaBaterias.map(item => `
+                <div class="product-card rounded-2xl overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="image-stage aspect-[4/3] p-4 flex items-center justify-center relative">
+                            <div class="absolute top-2.5 right-2.5 bg-black/75 border border-white/15 px-2.5 py-1 rounded-lg text-[11px] font-bold text-slate-300">
+                                PVP: <span class="line-through text-slate-400">${item.precoBase}</span>
+                            </div>
+                            <img src="${item.imagem}" onerror="this.src='${item.fallback}'" alt="${item.produto}"
+                                class="max-h-full max-w-full object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.8)]">
+                        </div>
+
+                        <div class="p-4 pb-2 text-center">
+                            <h3 class="font-display font-bold text-xl uppercase text-white tracking-wide leading-tight">${item.produto}</h3>
+                            <p class="text-xs font-bold text-gold-400 uppercase tracking-wider mt-1">${item.descricao}</p>
+                        </div>
+                    </div>
+
+                    <!-- Escalões de Quantidade -->
+                    <div class="p-3.5 pt-2">
+                        <div class="grid grid-cols-3 gap-1.5 text-center">
+                            <div class="bg-white/5 border border-white/10 rounded-xl py-2 px-1">
+                                <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-400">1 Unid.</span>
+                                <span class="font-display font-bold text-sm sm:text-base text-white mt-0.5 block">${item.u1}</span>
+                            </div>
+                            <div class="bg-amber-500/10 border border-amber-400/35 rounded-xl py-2 px-1">
+                                <span class="block text-[10px] font-bold uppercase tracking-wider text-amber-300">2 Unid.</span>
+                                <span class="font-display font-bold text-sm sm:text-base text-amber-200 mt-0.5 block">${item.u2}</span>
+                            </div>
+                            <div class="tier-best border rounded-xl py-2 px-1">
+                                <span class="block text-[10px] font-extrabold uppercase tracking-wider text-gold-300">5 Unid.</span>
+                                <span class="font-display font-bold text-sm sm:text-base text-gold-400 mt-0.5 block">${item.u5}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 2. Renderizar Linhas da Tabela Resumo
+            tbody.innerHTML = tabelaBaterias.map(item => `
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-2.5 px-3 sm:px-5">
+                        <div class="flex items-center gap-3">
+                            <img src="${item.imagem}" onerror="this.src='${item.fallback}'" alt="${item.produto}"
+                                class="w-11 h-11 rounded-xl object-contain bg-dark-950 p-1 border border-white/10 flex-shrink-0">
+                            <span class="font-display font-bold text-sm sm:text-base text-white uppercase">${item.produto}</span>
+                        </div>
+                    </td>
+                    <td class="py-2.5 px-2 sm:px-4 text-slate-300 font-medium">${item.descricao}</td>
+                    <td class="py-2.5 px-2 sm:px-4 text-center text-slate-400 line-through">${item.precoBase}</td>
+                    <td class="py-2.5 px-2 sm:px-4 text-center font-display font-bold text-white bg-white/[0.02]">${item.u1}</td>
+                    <td class="py-2.5 px-2 sm:px-4 text-center font-display font-bold text-amber-300 bg-amber-500/[0.05]">${item.u2}</td>
+                    <td class="py-2.5 px-3 sm:px-5 text-center font-display font-bold text-base sm:text-lg text-gold-400 bg-gold-500/[0.08]">${item.u5}</td>
+                </tr>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderizar);
+    </script>
+</body>
+
+</html>
