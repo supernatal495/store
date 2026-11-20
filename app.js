@@ -2,8 +2,8 @@
 // CONFIGURAÇÃO SUPABASE (Podes colar aqui diretamente para todos os telemóveis
 // ou configurar no Painel de Gestão -> Base Dados)
 // ============================================================================
-const DEFAULT_SUPABASE_URL = ""; // Ex: "https://xyzcompany.supabase.co"
-const DEFAULT_SUPABASE_KEY = ""; // Ex: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+const DEFAULT_SUPABASE_URL = "https://xsvptkqrekjgvwjimjfh.supabase.co";
+const DEFAULT_SUPABASE_KEY = "sb_publishable_I9fwnz49FDgsF1bmmVODSA_jD-mrL4b";
 
 // Estado global do catálogo
 let tipoAtual = 'baterias';

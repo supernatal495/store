@@ -30,7 +30,13 @@ CREATE TABLE IF NOT EXISTS public.encomendas (
     criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- 3. Ativar Row Level Security (RLS) com políticas abertas para a API do catálogo
+-- 3. Garantir permissões de acesso à API (mesmo que a opção automática não tenha sido marcada)
+GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON TABLE public.utilizadores TO anon, authenticated, service_role;
+GRANT ALL ON TABLE public.encomendas TO anon, authenticated, service_role;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;
+
+-- 4. Ativar Row Level Security (RLS) com políticas abertas para a API do catálogo
 ALTER TABLE public.utilizadores ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.encomendas ENABLE ROW LEVEL SECURITY;
 
@@ -40,7 +46,7 @@ CREATE POLICY "Acesso total utilizadores" ON public.utilizadores FOR ALL USING (
 DROP POLICY IF EXISTS "Acesso total encomendas" ON public.encomendas;
 CREATE POLICY "Acesso total encomendas" ON public.encomendas FOR ALL USING (true) WITH CHECK (true);
 
--- 4. Criar conta de Administrador inicial (Utilizador: admin | Password: galofire2026)
+-- 5. Criar conta de Administrador inicial (Utilizador: admin | Password: galofire2026)
 INSERT INTO public.utilizadores (nome, username, password, desconto, role)
 VALUES ('Administrador GaloFire', 'admin', 'galofire2026', 0, 'admin')
 ON CONFLICT (username) DO NOTHING;
