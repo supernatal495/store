@@ -28,6 +28,7 @@ const listaProdutos = [
 
 const listaPetardos = [
     // --- BOMBINHAS / PETARDOS EM STOCK (TOP EM DESTAQUE) ---
+    { id: "17", titulo: "Gatling", desc: "306 Disparos", preco: "30", imagem: "17.webp", premium: true, novo: true, stock: true, poucasUnidades: false },
     { id: "10", titulo: "Shovien Color", desc: "12 UNIDADES", preco: "30", imagem: "10.webp", premium: true, novo: false, stock: true, poucasUnidades: false },
     { id: "11", titulo: "Mísseis de Cruzeiro", desc: "Caixa 4 UNIDADES", preco: "20", imagem: "11.webp", premium: true, novo: false, stock: true, poucasUnidades: false },
     { id: "13", titulo: "Petardo", desc: "", preco: "4", imagem: "13.webp", premium: true, novo: false, stock: true, poucasUnidades: false },
