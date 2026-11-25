@@ -351,7 +351,8 @@ function carregarGaleria() {
 
     produtos.forEach((prod, index) => {
         const temStock = typeof prod.stock !== 'undefined' ? prod.stock : true;
-        const classEstoque = !temStock ? "out-of-stock pointer-events-none" : "";
+        const isBrevemente = prod.brevemente === true;
+        const classEstoque = !temStock ? "out-of-stock pointer-events-none" : (isBrevemente ? "coming-soon" : "");
         const isPremium = prod.premium === true && temStock;
         const isNovo = prod.novo === true && temStock;
 
@@ -395,7 +396,7 @@ function carregarGaleria() {
         const qtdNoCarrinho = carrinho[chaveItem]?.qtd || 0;
         let blocoPrecoHtml = "";
 
-        if (revendaAtiva && temStock) {
+        if (revendaAtiva && temStock && !isBrevemente) {
             const precoRevenda = calcularPrecoRevendedor(prod.preco);
             blocoPrecoHtml = `
                 <div class="space-y-2" onclick="event.stopPropagation()">
@@ -424,9 +425,10 @@ function carregarGaleria() {
                 </div>
             `;
         } else {
+            const labelEstado = !temStock ? 'Indisponível' : (isBrevemente ? 'Brevemente' : 'Preço');
             blocoPrecoHtml = `
                 <div class="price-box rounded-xl py-1.5 px-3 flex items-center justify-between">
-                    <span class="text-[10px] sm:text-xs uppercase tracking-wider font-bold ${(isPremium || isNovo) ? 'text-black/75' : 'text-slate-400'}">${temStock ? 'Preço' : 'Indisponível'}</span>
+                    <span class="text-[10px] sm:text-xs uppercase tracking-wider font-bold ${(isPremium || isNovo) ? 'text-black/75' : 'text-slate-400'}">${labelEstado}</span>
                     <span class="font-display font-bold text-xl sm:text-2xl leading-none ${priceColor}">${prod.preco}<span class="text-xs sm:text-sm align-top ml-0.5 ${euroColor}">€</span></span>
                 </div>
             `;

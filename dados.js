@@ -20,7 +20,7 @@ const listaProdutos = [
     { id: "13", titulo: "Vampire", desc: "36 Tiros Calibre 20", preco: "30", imagem: "13.webp", premium: false, novo: true, stock: true, poucasUnidades: false },
     { id: "14", titulo: "Firefox", desc: "25 Tiros Calibre 20", preco: "20", imagem: "14.webp", premium: false, novo: true, stock: true, poucasUnidades: false },
     { id: "10", titulo: "Pro", desc: "200 Tiros Calibre 20", preco: "175", imagem: "8.webp", premium: true, novo: false, stock: true, poucasUnidades: false },
-    { id: "5", titulo: "Gunfire", desc: "100 Tiros Calibre 20", preco: "75", imagem: "4.webp", premium: true, novo: false, stock: true, poucasUnidades: false },
+    { id: "5", titulo: "Gunfire", desc: "100 Tiros Calibre 20", preco: "75", imagem: "4.webp", premium: true, novo: false, stock: true, brevemente: true, poucasUnidades: false },
     { id: "2", titulo: "Feliz Ano Novo", desc: "36 Tiros Calibre 18", preco: "25", imagem: "2.webp", premium: false, novo: false, stock: true, poucasUnidades: false },
     { id: "8", titulo: "Happy Panda", desc: "36 Tiros Calibre 16", preco: "20", imagem: "7.webp", premium: false, novo: false, stock: true, poucasUnidades: false },
 
